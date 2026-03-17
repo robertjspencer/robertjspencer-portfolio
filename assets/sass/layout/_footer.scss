@@ -7,19 +7,6 @@
 /* Footer */
 
 	#footer {
-		&.compact {
-			> section {
-				width: 100%;
-				margin-left: 0;
-				text-align: center;
-
-				.copyright {
-					margin-top: 0;
-					margin-bottom: 0;
-				}
-			}
-		}
-
 		@include vendor('display', 'flex');
 		@include vendor('flex-wrap', 'wrap');
 		@include padding(5em, 5em);
