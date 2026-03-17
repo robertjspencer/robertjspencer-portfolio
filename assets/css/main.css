@@ -100,7 +100,17 @@ input, select, textarea {
 
 	body {
 		background-color: #161b22;
-		background-image: none;
+		min-height: 100vh;
+		background-image: linear-gradient(
+			180deg,
+			#1c2430 0%,
+			#161b22 28%,
+			#131920 55%,
+			#0d1117 100%
+		);
+		background-attachment: fixed;
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
 	}
 
 		body.is-preload *, body.is-preload *:before, body.is-preload *:after {
@@ -117,7 +127,6 @@ input, select, textarea {
 /* Type */
 
 	body {
-		background-color: #161b22;
 		color: rgba(255, 255, 255, 0.65);
 	}
 
@@ -3332,6 +3341,9 @@ input, select, textarea {
 
 	#main {
 		background-color: #ffffff;
+		background-image:
+			linear-gradient(to right, rgba(22, 27, 34, 0.06) 0%, rgba(255, 255, 255, 0) 3.5rem),
+			linear-gradient(to left, rgba(22, 27, 34, 0.06) 0%, rgba(255, 255, 255, 0) 3.5rem);
 		color: #636363;
 		border-radius: 0.25em;
 	}
