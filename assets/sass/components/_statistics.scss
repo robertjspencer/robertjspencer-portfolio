@@ -19,26 +19,18 @@
 			padding: 1.5em;
 			color: _palette(fg-bold);
 			text-align: center;
+			background-color: rgba(100, 216, 203, 0.15);
+			border-left: 1px solid rgba(255, 255, 255, 0.12);
 
-			&.style1 {
-				background-color: _palette(accent1);
+			&:first-child {
+				border-left: none;
 			}
 
-			&.style2 {
-				background-color: _palette(accent2);
-			}
-
-			&.style3 {
-				background-color: _palette(accent3);
-			}
-
-			&.style4 {
-				background-color: _palette(accent4);
-			}
-
-			&.style5 {
-				background-color: _palette(accent5);
-			}
+			&.style1 { background-color: rgba(100, 216, 203, 0.12); }
+			&.style2 { background-color: rgba(100, 216, 203, 0.15); }
+			&.style3 { background-color: rgba(100, 216, 203, 0.18); }
+			&.style4 { background-color: rgba(100, 216, 203, 0.15); }
+			&.style5 { background-color: rgba(100, 216, 203, 0.12); }
 
 			strong, b {
 				display: block;
@@ -61,6 +53,7 @@
 
 			.icon {
 				display: inline-block;
+				color: _palette(accent);
 
 				&:before {
 					font-size: 2.75rem;
@@ -84,7 +77,11 @@
 			margin: 0 auto _size(element-margin) auto;
 
 			li {
+				border-left: none;
+				border-top: 1px solid rgba(255, 255, 255, 0.12);
+
 				&:first-child {
+					border-top: none;
 					border-bottom-left-radius: 0;
 					border-top-right-radius: _size(border-radius);
 				}
