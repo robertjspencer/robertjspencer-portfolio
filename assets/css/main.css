@@ -3017,6 +3017,21 @@ input, select, textarea {
 				box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 			}
 
+			.spotlight .image.spotlight-captioned figure {
+				margin: 0;
+			}
+
+			.spotlight .image.spotlight-captioned figcaption {
+				margin-top: 0.75em;
+				font-size: 0.875em;
+				line-height: 1.45;
+				color: rgba(67, 75, 84, 0.88);
+				text-align: center;
+				max-width: 14em;
+				margin-left: auto;
+				margin-right: auto;
+			}
+
 		@media screen and (max-width: 980px) {
 
 			.spotlight {
