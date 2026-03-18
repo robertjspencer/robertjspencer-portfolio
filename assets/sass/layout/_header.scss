@@ -57,6 +57,7 @@
 				max-width: 100%;
 			}
 
+			/* Rounded square; no border for a cleaner hero look — add border: solid 1px rgba(255,255,255,0.35) if you want separation */
 			.header-photo {
 				@include vendor('transition', (
 					'opacity 1.25s ease',
@@ -64,15 +65,12 @@
 				));
 				@include vendor('transition-delay', '0s');
 				flex-shrink: 0;
-				padding: 0.35em;
-				border-radius: 100%;
-				border: solid 1px rgba(255, 255, 255, 0.35);
 
 				img {
 					display: block;
-					border-radius: 100%;
-					width: 7em;
-					height: 7em;
+					border-radius: 0.5em;
+					width: 11em;
+					height: 11em;
 					object-fit: cover;
 				}
 			}
@@ -120,8 +118,8 @@
 				}
 
 				.header-photo img {
-					width: 5.5em;
-					height: 5.5em;
+					width: 8em;
+					height: 8em;
 				}
 			}
 		}
