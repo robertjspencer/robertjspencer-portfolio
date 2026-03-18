@@ -3014,8 +3014,6 @@ input, select, textarea {
 				border-radius: 0.5em;
 				width: 18em;
 				height: auto;
-				max-height: 24em;
-				object-fit: cover;
 				box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 			}
 
