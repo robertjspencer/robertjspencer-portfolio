@@ -3012,7 +3012,7 @@ input, select, textarea {
 			.spotlight .image img {
 				display: block;
 				border-radius: 0.5em;
-				width: 18em;
+				width: 13em;
 				height: auto;
 				box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 			}
@@ -3066,7 +3066,7 @@ input, select, textarea {
 			}
 
 				.spotlight .image img {
-					width: 12em;
+					width: 9em;
 				}
 
 		}
