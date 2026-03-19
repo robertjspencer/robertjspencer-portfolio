@@ -488,6 +488,16 @@ h6,
 	background: rgba(23, 109, 121, 0.06);
 }
 
+.hero-actions .button:not(.primary) {
+	box-shadow: inset 0 0 0 1px rgba(116, 213, 204, 0.22);
+	color: rgba(244, 250, 249, 0.92) !important;
+	background: rgba(16, 33, 42, 0.28);
+}
+
+.hero-actions .button:not(.primary):hover {
+	background: rgba(116, 213, 204, 0.1);
+}
+
 .button.primary {
 	background: linear-gradient(135deg, var(--accent), var(--accent-soft)) !important;
 	color: #10212a !important;
