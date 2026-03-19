@@ -373,6 +373,10 @@ h6,
 	font-weight: 500;
 }
 
+.proof-card .button {
+	margin-top: 1.35rem;
+}
+
 .proof-links a,
 .link-list a {
 	display: inline-block;
