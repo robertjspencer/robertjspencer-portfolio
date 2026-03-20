@@ -7,10 +7,8 @@ The original site structure is still in place, but the user-facing page copy
 has been rewritten so the site now presents as a personal website instead of
 a stock demo.
 
-Main pages:
-- index.html: landing page
-- generic.html: about page
-- elements.html: supporting secondary page
+Main page:
+- index.html: single-page site
 
 Design base:
 - Stellar by HTML5 UP
