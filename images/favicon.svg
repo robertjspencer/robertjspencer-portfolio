@@ -1,21 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Robert Spencer favicon">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Robert Spencer navicon">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#10212a" />
-      <stop offset="100%" stop-color="#176d79" />
+    <linearGradient id="bg" x1="8%" y1="6%" x2="92%" y2="94%">
+      <stop offset="0%" stop-color="#050505" />
+      <stop offset="100%" stop-color="#212121" />
+    </linearGradient>
+    <linearGradient id="sheen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="16" fill="url(#bg)" />
+  <rect width="64" height="64" rx="18" fill="url(#bg)" />
+  <rect x="1.5" y="1.5" width="61" height="61" rx="16.5" fill="none" stroke="#ffffff" stroke-opacity="0.12" />
   <path
-    d="M20 14h13.5c9.2 0 15.1 4.8 15.1 12.5 0 5.8-3.2 9.8-8.6 11.5L49 50H39.6l-7.8-10.6H28V50h-8V14zm12.8 18.8c4.9 0 7.8-2 7.8-5.8 0-3.7-2.9-5.7-7.8-5.7H28v11.5h4.8z"
-    fill="#f4fbfa"
+    d="M18 13.5h15.1c9.9 0 16.1 4.8 16.1 12.7 0 5.9-3.2 10-8.7 11.8L50.3 50H39.8l-7.9-10.7H27V50h-9V13.5zm14.3 19c4.9 0 7.9-2 7.9-5.9 0-3.7-3-5.7-7.9-5.7H27v11.6h5.3z"
+    fill="#f6f3ed"
   />
   <path
-    d="M35.5 14 26 50"
+    d="M37.2 14.6 27.6 49.4"
     fill="none"
-    stroke="#74d5cc"
+    stroke="#cfc9be"
     stroke-linecap="round"
-    stroke-width="2.6"
-    opacity="0.9"
+    stroke-width="2.4"
+    opacity="0.95"
+  />
+  <circle cx="47" cy="17" r="2.7" fill="#f6f3ed" opacity="0.9" />
+  <path
+    d="M14 14c8.7-8.5 27.9-9.4 40.1-4v15c-5.3-8.3-23.9-13.1-40.1-11z"
+    fill="url(#sheen)"
+    opacity="0.45"
   />
 </svg>
