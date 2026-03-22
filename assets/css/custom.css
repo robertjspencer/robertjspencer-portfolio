@@ -374,12 +374,31 @@ h6,
 	margin-top: 2.2rem;
 }
 
-.metric-band article {
+.metric-band .metric-card {
+	display: block;
 	padding: 1.3rem 1.4rem;
 	border-radius: 1.35rem;
 	border: 1px solid #000000;
 	background: #ffffff;
 	box-shadow: var(--shadow-md);
+	text-decoration: none;
+	color: inherit;
+	transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.metric-band .metric-card:hover {
+	box-shadow: 0 14px 40px rgba(0, 0, 0, 0.12);
+	transform: translateY(-2px);
+}
+
+.metric-band .metric-card:focus-visible {
+	outline: 2px solid var(--text-strong);
+	outline-offset: 3px;
+}
+
+#proof-building-energy,
+#proof-nutrition {
+	scroll-margin-top: 5.5rem;
 }
 
 .metric-band strong {
@@ -922,7 +941,7 @@ h6,
 	}
 
 	.hero-signals li,
-	.metric-band article,
+	.metric-band .metric-card,
 	.focus-card,
 	.proof-card,
 	.overview-panel,
