@@ -307,16 +307,23 @@ h6,
 }
 
 .overview-grid,
-.journey-grid,
 .content-grid {
 	display: grid;
 	grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr);
 	gap: 2rem;
 }
 
+.journey-wrap {
+	max-width: 100%;
+}
+
+.journey-intro {
+	margin-bottom: 2rem;
+}
+
 .overview-copy p:last-child,
 .content-copy p:last-child,
-.journey-copy p:last-child {
+.journey-intro p:last-child {
 	margin-bottom: 0;
 }
 
@@ -479,10 +486,27 @@ h6,
 	color: var(--text-strong);
 }
 
-.journey-images {
-	margin-top: 1.5rem;
-	display: grid;
-	gap: 1.35rem;
+.journey-interleaved-main {
+	display: flex;
+	flex-direction: column;
+	gap: 1.4rem;
+}
+
+.journey-interleaved-main .timeline-item {
+	margin-bottom: 0;
+	padding-left: 1.25rem;
+}
+
+.journey-interleaved-main > .timeline-item:last-child {
+	padding-bottom: 0;
+}
+
+.journey-media-cell--empty {
+	display: none;
+}
+
+.journey-media-cell .journey-figure {
+	margin: 0;
 }
 
 .journey-figure {
@@ -494,10 +518,6 @@ h6,
 	width: 100%;
 	border-radius: 1.5rem;
 	box-shadow: var(--shadow-md);
-}
-
-.journey-images .journey-image {
-	margin-top: 0;
 }
 
 .journey-figure figcaption {
@@ -671,10 +691,43 @@ h6,
 	color: var(--text-muted);
 }
 
+@media screen and (min-width: 981px) {
+	.journey-interleaved-main {
+		display: grid;
+		grid-template-columns: minmax(0, 1.15fr) minmax(280px, 1fr);
+		column-gap: 2rem;
+		row-gap: 1.4rem;
+		align-items: start;
+		position: relative;
+	}
+
+	/* Timeline spine aligned with column 2 (matches .timeline line position on other pages) */
+	.journey-interleaved-main::before {
+		content: '';
+		position: absolute;
+		top: 0.4rem;
+		bottom: 0.4rem;
+		left: calc((100% - 2rem) * (1.15 / 2.15) + 2rem + 0.2rem);
+		width: 2px;
+		background: linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.18));
+		pointer-events: none;
+		z-index: 0;
+	}
+
+	.journey-interleaved-main > .journey-media-cell,
+	.journey-interleaved-main > .timeline-item {
+		position: relative;
+		z-index: 1;
+	}
+
+	.journey-media-cell--empty {
+		display: block;
+	}
+}
+
 @media screen and (max-width: 980px) {
 	.hero-shell,
 	.overview-grid,
-	.journey-grid,
 	.content-grid,
 	.focus-grid,
 	.proof-grid,
