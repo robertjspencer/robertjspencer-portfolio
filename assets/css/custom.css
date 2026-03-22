@@ -123,6 +123,7 @@ h6,
 .hero-actions {
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: center;
 	gap: 0.9rem;
 	margin: 0 0 1.75rem 0;
 }
@@ -134,6 +135,7 @@ h6,
 .hero-signals {
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: center;
 	gap: 0.75rem;
 	margin: 0;
 }
