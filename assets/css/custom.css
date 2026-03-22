@@ -576,10 +576,10 @@ h6,
 	justify-content: center;
 }
 
-/* Crest is compact; banner needs width — bias space toward SAAFE */
+/* Crest is compact; SAAFE wordmark is ~800×472 (wide) — give it horizontal room */
 .journey-logo-stack .journey-logo-frame:first-child {
-	flex: 0 1 34%;
-	max-width: 38%;
+	flex: 0 1 30%;
+	max-width: 34%;
 }
 
 .journey-logo-stack .journey-logo-frame:last-child {
@@ -623,6 +623,14 @@ h6,
 	height: auto;
 	object-fit: contain;
 	object-position: center;
+}
+
+/* Wide raster wordmark (intrinsic ~1.7:1); let it span the SAAFE column width */
+.journey-logo-img--saafe {
+	width: 100%;
+	height: auto;
+	max-height: 100%;
+	object-fit: contain;
 }
 
 .timeline {
