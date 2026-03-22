@@ -521,6 +521,15 @@ h6,
 	box-shadow: var(--shadow-md);
 }
 
+/* Square Radix photo: show full frame (incl. T-shirt logo) — no crop; letterbox sides inside 3:2 */
+.journey-media-cell .journey-image-frame--contain {
+	background: #ececec;
+}
+
+.journey-image-frame--contain .journey-image {
+	object-fit: contain;
+}
+
 .journey-image {
 	display: block;
 	width: 100%;
