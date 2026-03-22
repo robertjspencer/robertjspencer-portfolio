@@ -375,7 +375,9 @@ h6,
 }
 
 .metric-band .metric-card {
-	display: block;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
 	padding: 1.3rem 1.4rem;
 	border-radius: 1.35rem;
 	border: 1px solid #000000;
@@ -383,12 +385,14 @@ h6,
 	box-shadow: var(--shadow-md);
 	text-decoration: none;
 	color: inherit;
+	cursor: pointer;
 	transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 .metric-band .metric-card:hover {
 	box-shadow: 0 14px 40px rgba(0, 0, 0, 0.12);
 	transform: translateY(-2px);
+	border-color: rgba(0, 0, 0, 0.85);
 }
 
 .metric-band .metric-card:focus-visible {
@@ -410,8 +414,36 @@ h6,
 	line-height: 1;
 }
 
-.metric-band span {
+.metric-band .metric-card-desc {
 	color: var(--text-muted);
+	flex: 1 1 auto;
+}
+
+.metric-band .metric-card-cta {
+	margin-top: 1rem;
+	padding-top: 0.85rem;
+	border-top: 1px solid rgba(0, 0, 0, 0.12);
+	width: 100%;
+	font-size: 0.72rem;
+	font-weight: 600;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--text-strong);
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+}
+
+.metric-band .metric-card-cta::after {
+	content: '→';
+	font-size: 1.05rem;
+	line-height: 1;
+	transition: transform 0.2s ease;
+}
+
+.metric-band .metric-card:hover .metric-card-cta::after {
+	transform: translateX(4px);
 }
 
 .focus-grid,
