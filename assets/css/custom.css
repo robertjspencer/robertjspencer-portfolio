@@ -544,30 +544,56 @@ h6,
 	border-bottom-color: rgba(0, 0, 0, 0.16);
 }
 
-.section-contact {
+/* Connect: #main .button / #main h* from main.css beat .section-contact — scope with #main #contact */
+#main #contact.section-contact {
 	background: #000000 !important;
 	color: #ffffff;
 }
 
-.section-contact .section-heading h2,
-.section-contact .section-heading p,
-.section-contact .eyebrow {
+#main #contact.section-contact .eyebrow,
+#main #contact.section-contact .section-heading h2,
+#main #contact.section-contact .section-heading p {
+	color: #ffffff !important;
+}
+
+#main #contact.section-contact .section-heading h2 {
+	background-color: transparent !important;
+}
+
+#main #contact.section-contact header.major h2::after,
+#main #contact.section-contact .section-heading h2::after {
+	display: none !important;
+	content: none !important;
+}
+
+#main #contact.section-contact ::selection {
+	background: rgba(255, 255, 255, 0.35);
 	color: #ffffff;
 }
 
-.section-contact .button.primary {
-	background: #ffffff !important;
+#main #contact.section-contact .button.primary,
+#main #contact.section-contact .button.primary:hover,
+#main #contact.section-contact .button.primary:active {
+	background-color: #ffffff !important;
+	background-image: none !important;
 	color: #000000 !important;
+	box-shadow: none !important;
 }
 
-.section-contact .button:not(.primary) {
-	box-shadow: inset 0 0 0 1px #ffffff;
+#main #contact.section-contact .button:not(.primary),
+#main #contact.section-contact .button:not(.primary):hover,
+#main #contact.section-contact .button:not(.primary):active {
+	background-color: transparent !important;
+	box-shadow: inset 0 0 0 2px #ffffff !important;
 	color: #ffffff !important;
-	background: transparent;
 }
 
-.section-contact .button:not(.primary):hover {
-	background: rgba(255, 255, 255, 0.12);
+#main #contact.section-contact .button:not(.primary):hover {
+	background-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+#main #contact.section-contact .button:not(.primary):active {
+	background-color: rgba(255, 255, 255, 0.2) !important;
 }
 
 .contact-actions {
