@@ -398,6 +398,7 @@ h6,
 .focus-card,
 .proof-card {
 	padding: 1.6rem;
+	min-width: 0;
 }
 
 .card-index,
@@ -425,11 +426,14 @@ h6,
 
 .publication-figure {
 	margin: 1.25rem 0 0;
+	max-width: 100%;
+	min-width: 0;
 }
 
 .publication-figure img {
 	display: block;
 	width: 100%;
+	max-width: 100%;
 	height: auto;
 	border: 1px solid rgba(0, 0, 0, 0.14);
 	border-radius: 0.85rem;
