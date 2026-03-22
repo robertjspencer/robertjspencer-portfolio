@@ -546,7 +546,7 @@ h6,
 	text-align: center;
 }
 
-/* Institution logos — same card width as photos; PhD: UQ (crest) + SAAFE (banner) side-by-side */
+/* Institution logos — same card width as photos; PhD: UQ + SAAFE side-by-side (both landscape wordmarks) */
 .journey-figure--institution {
 	margin: 0;
 }
@@ -566,7 +566,7 @@ h6,
 	min-height: 0;
 }
 
-/* Avoid equal vertical “halves” (looked like lots of dead space between mismatched marks) */
+/* Equal columns: UQ (horizontal lockup) and SAAFE are both wide; scale with object-fit: contain */
 .journey-logo-stack .journey-logo-frame {
 	flex: 1 1 0;
 	min-width: 0;
@@ -574,17 +574,6 @@ h6,
 	display: flex;
 	align-items: center;
 	justify-content: center;
-}
-
-/* Crest is compact; SAAFE wordmark is ~800×472 (wide) — give it horizontal room */
-.journey-logo-stack .journey-logo-frame:first-child {
-	flex: 0 1 30%;
-	max-width: 34%;
-}
-
-.journey-logo-stack .journey-logo-frame:last-child {
-	flex: 1 1 0;
-	min-width: 0;
 }
 
 @media screen and (max-width: 520px) {
@@ -595,8 +584,7 @@ h6,
 		padding: 0.55rem 0.65rem;
 	}
 
-	.journey-logo-stack .journey-logo-frame:first-child,
-	.journey-logo-stack .journey-logo-frame:last-child {
+	.journey-logo-stack .journey-logo-frame {
 		flex: 0 1 auto;
 		max-width: 100%;
 		width: 100%;
@@ -625,12 +613,24 @@ h6,
 	object-position: center;
 }
 
-/* Wide raster wordmark (intrinsic ~1.7:1); let it span the SAAFE column width */
+/* Landscape wordmarks: fill frame width, cap height so both marks stay legible in the 3:2 card */
+.journey-logo-img--uq-wide,
 .journey-logo-img--saafe {
 	width: 100%;
 	height: auto;
 	max-height: 100%;
 	object-fit: contain;
+	object-position: center;
+}
+
+/* Square / stacked UQ mark (uq-logo.png) — portrait content; same contain rules, may letterbox horizontally */
+.journey-logo-img--uq-stacked {
+	width: auto;
+	max-width: 100%;
+	height: auto;
+	max-height: 100%;
+	object-fit: contain;
+	object-position: center;
 }
 
 .timeline {
