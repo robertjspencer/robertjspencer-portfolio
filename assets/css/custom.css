@@ -215,8 +215,23 @@ h6,
 }
 
 #main > .main {
+	position: relative;
 	padding: 5.4rem 5rem;
-	border-top-color: rgba(17, 33, 45, 0.08);
+	border-top-color: rgba(0, 0, 0, 0.08);
+}
+
+#main > .main + .main {
+	border-top: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+#main > .main + .main:before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 5rem;
+	width: 6rem;
+	height: 3px;
+	background: #000000;
 }
 
 #main > .main:nth-child(odd) {
@@ -224,7 +239,7 @@ h6,
 }
 
 #main > .main:nth-child(even) {
-	background: #fafafa;
+	background: #f5f5f5;
 }
 
 .custom-section {
@@ -562,6 +577,10 @@ h6,
 		padding: 4rem 3rem;
 	}
 
+	#main > .main + .main:before {
+		left: 3rem;
+	}
+
 	.hero-lead {
 		max-width: none;
 	}
@@ -595,6 +614,11 @@ h6,
 
 	#main > .main {
 		padding: 3rem 1.6rem;
+	}
+
+	#main > .main + .main:before {
+		left: 1.6rem;
+		width: 4.5rem;
 	}
 
 	.hero-signals li,
