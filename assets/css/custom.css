@@ -526,7 +526,7 @@ h6,
 .timeline-item {
 	position: relative;
 	display: grid;
-	grid-template-columns: 110px minmax(0, 1fr);
+	grid-template-columns: minmax(6.5rem, 7.5rem) minmax(0, 1fr);
 	gap: 1rem;
 	margin-bottom: 1.4rem;
 	padding: 0.15rem 0 0.9rem 0;
