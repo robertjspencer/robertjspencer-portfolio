@@ -914,24 +914,72 @@ h6,
 		gap: 0.45rem;
 	}
 
-	/* Journey: asymmetric vertical rhythm — images sit closer to the preceding text,
-	   with clearer space before the narrative block that follows each figure */
+	/* Journey: narrative first, then figure (DOM is media → text; order flips on small screens) */
 	.journey-interleaved-main {
 		gap: 0;
 	}
 
-	.journey-interleaved-main > .timeline-item {
-		padding-bottom: 0.35rem;
-		margin-bottom: 0.65rem;
+	/* Pair DOM order M,T → visual T,M (unique order values; max 6 pairs = 12 children) */
+	.journey-interleaved-main > :nth-child(1) {
+		order: 2;
+	}
+	.journey-interleaved-main > :nth-child(2) {
+		order: 1;
+	}
+	.journey-interleaved-main > :nth-child(3) {
+		order: 4;
+	}
+	.journey-interleaved-main > :nth-child(4) {
+		order: 3;
+	}
+	.journey-interleaved-main > :nth-child(5) {
+		order: 6;
+	}
+	.journey-interleaved-main > :nth-child(6) {
+		order: 5;
+	}
+	.journey-interleaved-main > :nth-child(7) {
+		order: 8;
+	}
+	.journey-interleaved-main > :nth-child(8) {
+		order: 7;
+	}
+	.journey-interleaved-main > :nth-child(9) {
+		order: 10;
+	}
+	.journey-interleaved-main > :nth-child(10) {
+		order: 9;
+	}
+	.journey-interleaved-main > :nth-child(11) {
+		order: 12;
+	}
+	.journey-interleaved-main > :nth-child(12) {
+		order: 11;
+	}
+	.journey-interleaved-main > :nth-child(13) {
+		order: 14;
+	}
+	.journey-interleaved-main > :nth-child(14) {
+		order: 13;
+	}
+	.journey-interleaved-main > :nth-child(15) {
+		order: 16;
+	}
+	.journey-interleaved-main > :nth-child(16) {
+		order: 15;
 	}
 
-	.journey-interleaved-main > .timeline-item:has(+ .journey-media-cell:not(.journey-media-cell--empty)) {
-		margin-bottom: 0.15rem;
+	.journey-interleaved-main > .timeline-item:nth-child(2n) {
 		padding-bottom: 0.1rem;
+		margin-bottom: 0.15rem;
 	}
 
-	.journey-interleaved-main > .journey-media-cell:not(.journey-media-cell--empty) {
+	.journey-interleaved-main > .journey-media-cell:not(.journey-media-cell--empty):nth-child(2n-1) {
 		margin-bottom: 1.65rem;
+	}
+
+	.journey-interleaved-main > .journey-media-cell:not(.journey-media-cell--empty):nth-last-child(2) {
+		margin-bottom: 0;
 	}
 
 	.journey-interleaved-main > .timeline-item:last-child {
