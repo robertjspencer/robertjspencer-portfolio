@@ -44,7 +44,11 @@
 					</div>
 					<div class="hero-visual">
 						<div class="hero-portrait">
-							<img src="images/robert-spencer-headshot.png" alt="Portrait of Robert Spencer" />
+							<img
+								class="photo-zoomable"
+								src="images/robert-spencer-headshot.png"
+								alt="Portrait of Robert Spencer"
+							/>
 						</div>
 						<div class="hero-note">
 							<p class="label">Current research direction</p>
@@ -187,6 +191,7 @@
 							</p>
 							<figure class="publication-figure">
 								<img
+									class="photo-zoomable"
 									src="images/spencer-et-al-2025-energy-buildings-first-page.png"
 									width="1535"
 									height="1138"
@@ -303,7 +308,7 @@
 										<img
 											src="images/radix-nutrition-2024.jpg"
 											alt="Robert Spencer at Radix Nutrition"
-											class="journey-image"
+											class="journey-image photo-zoomable"
 											loading="lazy"
 											decoding="async"
 										/>
@@ -345,7 +350,7 @@
 										<img
 											src="images/2025-02-21-massey-manalyt-supervisors.jpg"
 											alt="Group photo: Dr Mikael Boulic, Dr Hennie van Heerden, Robert Spencer, Dr Surangika Ranathunga, and A/Prof Teo Susnjak outside the School of Built Environment Laboratories at Massey University"
-											class="journey-image"
+											class="journey-image photo-zoomable"
 											loading="lazy"
 											decoding="async"
 										/>
@@ -363,7 +368,11 @@
 							<div class="journey-media-cell">
 								<figure class="journey-figure">
 									<div class="journey-image-frame">
-										<img src="images/2024-massey-graduation.jpeg" alt="Robert Spencer at Massey University graduation" class="journey-image" />
+										<img
+											src="images/2024-massey-graduation.jpeg"
+											alt="Robert Spencer at Massey University graduation"
+											class="journey-image photo-zoomable"
+										/>
 									</div>
 									<figcaption>Master of Analytics in Health — Massey University, 2024</figcaption>
 								</figure>
@@ -378,7 +387,11 @@
 							<div class="journey-media-cell">
 								<figure class="journey-figure">
 									<div class="journey-image-frame">
-										<img src="images/2023-waikato-graduation.jpeg" alt="Robert Spencer at Waikato University graduation" class="journey-image" />
+										<img
+											src="images/2023-waikato-graduation.jpeg"
+											alt="Robert Spencer at Waikato University graduation"
+											class="journey-image photo-zoomable"
+										/>
 									</div>
 									<figcaption>Bachelor of Health, Sport &amp; Human Performance — double majors in Human Performance Science and Community Health — The University of Waikato, 2022</figcaption>
 								</figure>
@@ -446,6 +459,25 @@
 			</footer>
 		</div>
 
+		<div
+			id="photo-zoom-modal"
+			class="photo-zoom-modal"
+			role="dialog"
+			aria-modal="true"
+			aria-label="Enlarged photo"
+			hidden
+		>
+			<div class="photo-zoom-backdrop" role="presentation"></div>
+			<button type="button" class="photo-zoom-close" aria-label="Close enlarged photo">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<div class="photo-zoom-viewport">
+				<div class="photo-zoom-stage">
+					<img class="photo-zoom-img" alt="" />
+				</div>
+			</div>
+		</div>
+
 		<script src="assets/js/jquery.min.js"></script>
 		<script src="assets/js/jquery.scrollex.min.js"></script>
 		<script src="assets/js/jquery.scrolly.min.js"></script>
@@ -453,5 +485,6 @@
 		<script src="assets/js/breakpoints.min.js"></script>
 		<script src="assets/js/util.js"></script>
 		<script src="assets/js/main.js"></script>
+		<script src="assets/js/photo-zoom.js"></script>
 	</body>
 </html>
