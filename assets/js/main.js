@@ -86,8 +86,28 @@
 
 	// Nav.
 		var $nav = $('#nav');
+		var $mobileNavToggle = $('#mobile-nav-toggle');
 
 		if ($nav.length > 0) {
+			var mobileNavQuery = window.matchMedia ? window.matchMedia('(max-width: 736px)') : null;
+			var setMobileNavState = function(isOpen) {
+				$nav.toggleClass('is-open', isOpen);
+				if ($mobileNavToggle.length > 0)
+					$mobileNavToggle.attr('aria-expanded', isOpen ? 'true' : 'false');
+			};
+			var syncMobileNavForViewport = function() {
+				if (!mobileNavQuery || !mobileNavQuery.matches)
+					setMobileNavState(false);
+			};
+
+			if ($mobileNavToggle.length > 0) {
+				$mobileNavToggle.on('click', function() {
+					setMobileNavState(!$nav.hasClass('is-open'));
+				});
+
+				$window.on('resize', syncMobileNavForViewport);
+				syncMobileNavForViewport();
+			}
 
 			// Shrink effect.
 				$main
@@ -126,6 +146,10 @@
 							$this
 								.addClass('active')
 								.addClass('active-locked');
+
+						// Collapse mobile nav after selecting a section link.
+							if ($nav.hasClass('is-open'))
+								setMobileNavState(false);
 
 					})
 					.each(function() {

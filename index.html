@@ -82,7 +82,7 @@
 
 			<nav id="nav">
 				<div class="nav-shell">
-					<ul class="nav-links">
+					<ul id="nav-links" class="nav-links">
 						<li><a href="#about" class="active">Overview</a></li>
 						<li><a href="#focus">Focus</a></li>
 						<li><a href="#proof">Proof</a></li>
@@ -90,6 +90,16 @@
 						<li><a href="#content">Online</a></li>
 						<li><a href="#contact">Connect</a></li>
 					</ul>
+					<button
+						id="mobile-nav-toggle"
+						class="mobile-nav-toggle"
+						type="button"
+						aria-expanded="false"
+						aria-controls="nav-links"
+						aria-label="Toggle navigation menu"
+					>
+						<span class="mobile-nav-toggle-label">Menu</span>
+					</button>
 					<button
 						id="theme-toggle"
 						class="theme-toggle"
