@@ -21,6 +21,8 @@
 	--nav-active-bg: #000000;
 	--nav-active-text: #ffffff;
 	--button-primary-bg: #000000;
+	--button-primary-hover: #1a1a1a;
+	--button-primary-active: #2a2a2a;
 	--button-primary-text: #ffffff;
 	--button-secondary-border: rgba(0, 0, 0, 0.16);
 	--button-secondary-hover: rgba(0, 0, 0, 0.06);
@@ -44,39 +46,41 @@
 :root[data-theme='dark'] {
 	--bg-page: #0d1117;
 	--bg-glow: rgba(255, 255, 255, 0.07);
-	--surface: #121923;
-	--surface-strong: #0f151e;
-	--surface-soft: #18212d;
-	--text-strong: #f5f7fb;
-	--text-body: rgba(245, 247, 251, 0.94);
-	--text-muted: rgba(245, 247, 251, 0.68);
-	--border-soft: rgba(255, 255, 255, 0.14);
-	--border-strong: rgba(255, 255, 255, 0.22);
-	--border-subtle: rgba(255, 255, 255, 0.1);
-	--accent: #f5f7fb;
-	--accent-deep: #f5f7fb;
-	--accent-soft: rgba(255, 255, 255, 0.12);
-	--nav-bg: rgba(13, 17, 23, 0.94);
-	--nav-border: rgba(255, 255, 255, 0.12);
-	--nav-hover: rgba(255, 255, 255, 0.08);
-	--nav-active-bg: #f5f7fb;
+	--surface: #16202c;
+	--surface-strong: #111925;
+	--surface-soft: #1c2735;
+	--text-strong: #ffffff;
+	--text-body: rgba(255, 255, 255, 0.96);
+	--text-muted: rgba(255, 255, 255, 0.82);
+	--border-soft: rgba(255, 255, 255, 0.2);
+	--border-strong: rgba(255, 255, 255, 0.3);
+	--border-subtle: rgba(255, 255, 255, 0.16);
+	--accent: #ffffff;
+	--accent-deep: #ffffff;
+	--accent-soft: rgba(255, 255, 255, 0.16);
+	--nav-bg: rgba(13, 17, 23, 0.97);
+	--nav-border: rgba(255, 255, 255, 0.18);
+	--nav-hover: rgba(255, 255, 255, 0.12);
+	--nav-active-bg: #ffffff;
 	--nav-active-text: #0d1117;
-	--button-primary-bg: #f5f7fb;
+	--button-primary-bg: #ffffff;
+	--button-primary-hover: #eef2f7;
+	--button-primary-active: #dfe6ef;
 	--button-primary-text: #0d1117;
-	--button-secondary-border: rgba(255, 255, 255, 0.18);
-	--button-secondary-hover: rgba(255, 255, 255, 0.08);
+	--button-secondary-border: rgba(255, 255, 255, 0.24);
+	--button-secondary-hover: rgba(255, 255, 255, 0.12);
 	--button-secondary-bg: transparent;
-	--contact-bg: #f5f7fb;
+	--contact-bg: #ffffff;
 	--contact-text: #0d1117;
 	--contact-selection-bg: rgba(13, 17, 23, 0.18);
 	--contact-primary-bg: #0d1117;
-	--contact-primary-text: #f5f7fb;
+	--contact-primary-text: #ffffff;
 	--contact-secondary-border: #0d1117;
 	--contact-secondary-hover: rgba(13, 17, 23, 0.08);
 	--contact-secondary-active: rgba(13, 17, 23, 0.14);
-	--timeline-line-start: rgba(245, 247, 251, 0.85);
-	--timeline-line-end: rgba(245, 247, 251, 0.16);
-	--timeline-dot-ring: rgba(255, 255, 255, 0.12);
+	--timeline-line-start: rgba(255, 255, 255, 0.9);
+	--timeline-line-end: rgba(255, 255, 255, 0.22);
+	--timeline-dot-ring: rgba(255, 255, 255, 0.16);
 	--overlay-backdrop: rgba(4, 7, 12, 0.94);
 	--shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.32);
 	--shadow-md: 0 14px 32px rgba(0, 0, 0, 0.24);
@@ -961,6 +965,16 @@ h6,
 
 .button.primary {
 	background: var(--button-primary-bg) !important;
+	color: var(--button-primary-text) !important;
+}
+
+.button.primary:hover {
+	background: var(--button-primary-hover) !important;
+	color: var(--button-primary-text) !important;
+}
+
+.button.primary:active {
+	background: var(--button-primary-active) !important;
 	color: var(--button-primary-text) !important;
 }
 
