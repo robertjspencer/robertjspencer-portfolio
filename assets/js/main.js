@@ -88,13 +88,6 @@
 		var $nav = $('#nav');
 
 		if ($nav.length > 0) {
-			var $mobileNavToggle = $('#mobile-nav-toggle'),
-				closeMobileNav = function() {
-					$nav.removeClass('mobile-open');
-
-					if ($mobileNavToggle.length > 0)
-						$mobileNavToggle.attr('aria-expanded', 'false');
-				};
 
 			// Shrink effect.
 				$main
@@ -133,9 +126,6 @@
 							$this
 								.addClass('active')
 								.addClass('active-locked');
-
-						if ($mobileNavToggle.length > 0)
-							closeMobileNav();
 
 					})
 					.each(function() {
@@ -179,30 +169,6 @@
 							});
 
 					});
-
-			if ($mobileNavToggle.length > 0) {
-				$mobileNavToggle.on('click', function() {
-					var isOpen = $nav.hasClass('mobile-open');
-
-					if (isOpen) {
-						closeMobileNav();
-						return;
-					}
-
-					$nav.addClass('mobile-open');
-					$mobileNavToggle.attr('aria-expanded', 'true');
-				});
-
-				$window.on('resize', function() {
-					if ($window.width() > 736)
-						closeMobileNav();
-				});
-
-				$window.on('keydown', function(event) {
-					if (event.key === 'Escape')
-						closeMobileNav();
-				});
-			}
 
 		}
 

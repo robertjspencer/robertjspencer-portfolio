@@ -82,35 +82,23 @@
 
 			<nav id="nav">
 				<div class="nav-shell">
+					<ul class="nav-links">
+						<li><a href="#about" class="active">Overview</a></li>
+						<li><a href="#focus">Focus</a></li>
+						<li><a href="#proof">Proof</a></li>
+						<li><a href="#journey">Journey</a></li>
+						<li><a href="#content">Online</a></li>
+						<li><a href="#contact">Connect</a></li>
+					</ul>
 					<button
-						id="mobile-nav-toggle"
-						class="mobile-nav-toggle"
+						id="theme-toggle"
+						class="theme-toggle"
 						type="button"
-						aria-label="Toggle navigation menu"
-						aria-controls="mobile-nav-panel"
-						aria-expanded="false"
+						aria-label="Switch color theme"
 					>
-						<span class="mobile-nav-toggle-label">Menu</span>
+						<span class="theme-toggle-dot" aria-hidden="true"></span>
+						<span class="theme-toggle-label">Dark mode</span>
 					</button>
-					<div id="mobile-nav-panel" class="nav-mobile-panel">
-						<ul class="nav-links">
-							<li><a href="#about" class="active">Overview</a></li>
-							<li><a href="#focus">Focus</a></li>
-							<li><a href="#proof">Proof</a></li>
-							<li><a href="#journey">Journey</a></li>
-							<li><a href="#content">Online</a></li>
-							<li><a href="#contact">Connect</a></li>
-						</ul>
-						<button
-							id="theme-toggle"
-							class="theme-toggle"
-							type="button"
-							aria-label="Switch color theme"
-						>
-							<span class="theme-toggle-dot" aria-hidden="true"></span>
-							<span class="theme-toggle-label">Dark mode</span>
-						</button>
-					</div>
 					<script>
 						(function () {
 							var theme = document.documentElement.getAttribute('data-theme') || 'light';
