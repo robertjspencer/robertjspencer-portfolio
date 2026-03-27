@@ -4,6 +4,25 @@
 		<title>Robert Spencer | Data Scientist & AI Researcher</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<script>
+			(function () {
+				var storageKey = 'preferred-theme';
+				var storedTheme = null;
+				var prefersDark = false;
+
+				try {
+					storedTheme = window.localStorage.getItem(storageKey);
+				} catch (error) {}
+
+				if (window.matchMedia) {
+					prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+				}
+
+				var theme = storedTheme || (prefersDark ? 'dark' : 'light');
+				document.documentElement.setAttribute('data-theme', theme);
+				document.documentElement.style.colorScheme = theme;
+			})();
+		</script>
 		<meta
 			name="description"
 			content="Robert Spencer is a data scientist and incoming PhD researcher in AI at The University of Queensland, focused on digital twins, AMR risk assessment, and production-ready machine learning systems."
@@ -62,14 +81,41 @@
 			</header>
 
 			<nav id="nav">
-				<ul>
-					<li><a href="#about" class="active">Overview</a></li>
-					<li><a href="#focus">Focus</a></li>
-					<li><a href="#proof">Proof</a></li>
-					<li><a href="#journey">Journey</a></li>
-					<li><a href="#content">Online</a></li>
-					<li><a href="#contact">Connect</a></li>
-				</ul>
+				<div class="nav-shell">
+					<ul class="nav-links">
+						<li><a href="#about" class="active">Overview</a></li>
+						<li><a href="#focus">Focus</a></li>
+						<li><a href="#proof">Proof</a></li>
+						<li><a href="#journey">Journey</a></li>
+						<li><a href="#content">Online</a></li>
+						<li><a href="#contact">Connect</a></li>
+					</ul>
+					<button
+						id="theme-toggle"
+						class="theme-toggle"
+						type="button"
+						aria-label="Switch color theme"
+					>
+						<span class="theme-toggle-dot" aria-hidden="true"></span>
+						<span class="theme-toggle-label">Dark mode</span>
+					</button>
+					<script>
+						(function () {
+							var theme = document.documentElement.getAttribute('data-theme') || 'light';
+							var toggle = document.getElementById('theme-toggle');
+							var label = toggle && toggle.querySelector('.theme-toggle-label');
+
+							if (!toggle) return;
+
+							toggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+							toggle.setAttribute('title', theme === 'dark' ? 'Light mode' : 'Dark mode');
+
+							if (label) {
+								label.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
+							}
+						})();
+					</script>
+				</div>
 			</nav>
 
 			<div id="main">
