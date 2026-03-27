@@ -1140,24 +1140,29 @@ h6,
 
 @media screen and (max-width: 736px) {
 	#nav {
-		display: block;
-		position: static;
-		top: auto;
-		z-index: 10000;
-		width: 100%;
-		margin: 0 0 0.75rem 0;
-		padding: 0.35rem 0.45rem;
-		border-radius: 1.1rem;
-		box-sizing: border-box;
-		transition: box-shadow 0.2s ease;
+		position: fixed;
+		top: 0.75rem;
+		right: 0.75rem;
+		left: auto;
+		width: auto;
+		max-width: none;
+		margin: 0;
+		padding: 0;
+		background: transparent;
+		border: 0;
+		box-shadow: none;
+		backdrop-filter: none;
+		z-index: 10001;
 	}
 
 	#nav.alt {
-		position: static;
-		top: auto;
-		margin: 0 0 0.75rem 0;
-		border-radius: 1.1rem;
+		position: fixed;
+		top: 0.75rem;
+		right: 0.75rem;
+		margin: 0;
 		box-shadow: none;
+		background: transparent;
+		border-radius: 0;
 	}
 
 	#nav + #main {
@@ -1165,12 +1170,8 @@ h6,
 	}
 
 	.nav-shell {
-		display: flex;
-		flex-wrap: nowrap;
-		align-items: center;
-		justify-content: center;
-		gap: 0.4rem;
-		width: 100%;
+		width: auto;
+		display: block;
 	}
 
 	#nav .nav-links {
@@ -1183,14 +1184,22 @@ h6,
 		justify-content: center;
 		width: auto;
 		margin: 0;
-		min-height: 2.2rem;
-		padding: 0 0.9rem;
-		font-size: 0.82rem;
-		border-radius: 0.65rem;
+		min-height: 2.6rem;
+		min-width: 2.6rem;
+		padding: 0;
+		border-radius: 999px;
+		background: var(--nav-bg);
+		backdrop-filter: blur(12px);
+		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
 	}
 
 	.theme-toggle-label {
-		display: inline;
+		display: none;
+	}
+
+	.theme-toggle-dot {
+		width: 1rem;
+		height: 1rem;
 	}
 
 	#wrapper {
@@ -1233,12 +1242,15 @@ h6,
 }
 
 @media screen and (max-width: 480px) {
-	#nav {
-		padding: 0.3rem 0.35rem;
+	#nav,
+	#nav.alt {
+		top: 0.6rem;
+		right: 0.6rem;
 	}
 
 	.theme-toggle {
-		min-height: 2.1rem;
+		min-height: 2.4rem;
+		min-width: 2.4rem;
 	}
 }
 
