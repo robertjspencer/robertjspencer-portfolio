@@ -1141,23 +1141,23 @@ h6,
 @media screen and (max-width: 736px) {
 	#nav {
 		display: block;
-		position: sticky;
-		top: 0.5rem;
+		position: static;
+		top: auto;
 		z-index: 10000;
-		width: calc(100% - 1rem);
-		margin: 0.5rem auto 1rem auto;
-		padding: 0.5rem;
+		width: 100%;
+		margin: 0 0 0.75rem 0;
+		padding: 0.35rem;
 		border-radius: 1.1rem;
 		box-sizing: border-box;
 		transition: box-shadow 0.2s ease;
 	}
 
 	#nav.alt {
-		position: sticky;
-		top: 0.5rem;
-		margin: 0.5rem auto 1rem auto;
+		position: static;
+		top: auto;
+		margin: 0 0 0.75rem 0;
 		border-radius: 1.1rem;
-		box-shadow: var(--shadow-md);
+		box-shadow: none;
 	}
 
 	#nav + #main {
@@ -1165,47 +1165,59 @@ h6,
 	}
 
 	.nav-shell {
-		display: block;
+		display: flex;
+		align-items: center;
+		gap: 0.35rem;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+	}
+
+	.nav-shell::-webkit-scrollbar {
+		display: none;
 	}
 
 	#nav .nav-links {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		width: 100%;
-		gap: 0.4rem;
-		padding: 0.1rem;
+		display: flex;
+		flex-wrap: nowrap;
+		width: auto;
+		gap: 0.3rem;
+		padding: 0;
 		margin: 0;
+		flex: 0 0 auto;
 	}
 
 	#nav .nav-links li {
-		display: flex;
+		display: block;
+		flex: 0 0 auto;
 	}
 
 	#nav ul li a {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 100%;
-		min-height: 2.55rem;
-		padding: 0.45rem 0.6rem;
-		line-height: 1.1;
-		font-size: 0.82rem;
+		width: auto;
+		min-height: 2.15rem;
+		padding: 0.35rem 0.68rem;
+		line-height: 1;
+		font-size: 0.78rem;
 		text-align: center;
-		white-space: normal;
-		border-radius: 0.75rem;
+		white-space: nowrap;
+		border-radius: 0.65rem;
 	}
 
 	.theme-toggle {
-		width: calc(100% - 0.2rem);
-		margin: 0.45rem 0.1rem 0.1rem 0.1rem;
-		min-height: 2.55rem;
-		padding: 0 0.8rem;
-		font-size: 0.82rem;
-		border-radius: 0.75rem;
+		flex: 0 0 auto;
+		width: auto;
+		margin: 0;
+		min-height: 2.15rem;
+		padding: 0 0.62rem;
+		font-size: 0.78rem;
+		border-radius: 0.65rem;
 	}
 
 	.theme-toggle-label {
-		white-space: normal;
+		display: none;
 	}
 
 	#wrapper {
@@ -1248,17 +1260,14 @@ h6,
 }
 
 @media screen and (max-width: 480px) {
-	#nav .nav-links {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
-
 	#nav ul li a {
-		padding: 0.45rem 0.6rem;
-		font-size: 0.82rem;
+		padding: 0.35rem 0.62rem;
+		font-size: 0.76rem;
 	}
 
 	.theme-toggle {
-		font-size: 0.82rem;
+		padding: 0 0.55rem;
+		font-size: 0.76rem;
 	}
 }
 
