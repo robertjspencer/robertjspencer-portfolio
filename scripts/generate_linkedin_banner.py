@@ -28,6 +28,8 @@ WOFF2_SPACE_GROTESK_700 = (
 
 # LinkedIn cover (recommended): https://www.linkedin.com/help/linkedin/answer/a568217
 W, H = 1584, 396
+# Render at 2× then downscale with LANCZOS for crisp sub-pixel anti-aliasing.
+SCALE = 2
 # Inset from the **right** edge. Text is right-aligned so it clears the profile photo
 # (large circle on the left on mobile; still looks fine on desktop).
 MARGIN_RIGHT = 400
@@ -61,9 +63,15 @@ def tracked_line_width(font: ImageFont.FreeTypeFont, text: str, tracking_em: flo
     return total
 
 
-def x_right_aligned(font: ImageFont.FreeTypeFont, text: str, tracking_em: float) -> float:
-    """Left edge x so the tracked line ends MARGIN_RIGHT px before canvas right."""
-    return float(W) - MARGIN_RIGHT - tracked_line_width(font, text, tracking_em)
+def x_right_aligned(
+    font: ImageFont.FreeTypeFont,
+    text: str,
+    tracking_em: float,
+    canvas_w: float,
+    margin_right: float,
+) -> float:
+    """Left edge x so the tracked line ends margin_right px before canvas right."""
+    return canvas_w - margin_right - tracked_line_width(font, text, tracking_em)
 
 
 def draw_tracked_baseline(
@@ -132,43 +140,49 @@ def main() -> None:
     plex_400 = woff2_to_temp_path(WOFF2_IBM_PLEX_400)
     sg_path = woff2_to_temp_path(WOFF2_SPACE_GROTESK_700)
     try:
-        eyebrow_size = 20
-        name_size = 86
-        url_size = 18
+        # All pixel measurements scaled up; canvas downscaled at the end for crisp output.
+        sw, sh = W * SCALE, H * SCALE
+        margin_right = MARGIN_RIGHT * SCALE
+        y_top = float(Y_TOP_INSET * SCALE)
+
+        eyebrow_size = 20 * SCALE
+        name_size = 86 * SCALE
+        url_size = 18 * SCALE
         font_eyebrow = ImageFont.truetype(plex_600, eyebrow_size)
         font_name = ImageFont.truetype(sg_path, name_size)
         font_url = ImageFont.truetype(plex_400, url_size)
 
         eyebrow = "RESEARCHER + BUILDER"
         name = "Robert Spencer"
-        gap = 22
-        gap_after_name = 14
+        gap = 22 * SCALE
+        gap_after_name = 14 * SCALE
 
         track_eye = 0.16
         track_name = -0.06
         track_url = 0.05
 
-        img = Image.new("RGB", (W, H), BG)
+        img = Image.new("RGB", (sw, sh), BG)
         draw = ImageDraw.Draw(img)
 
-        y_top = float(Y_TOP_INSET)
-
-        x_eye = x_right_aligned(font_eyebrow, eyebrow, track_eye)
+        x_eye = x_right_aligned(font_eyebrow, eyebrow, track_eye, sw, margin_right)
         baseline_eye = align_baseline_to_top(draw, x_eye, eyebrow, font_eyebrow, track_eye, y_top)
         ink_eye = tracked_ink_bbox(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye)
         want_name_top = ink_eye[3] + gap
 
-        x_name = x_right_aligned(font_name, name, track_name)
+        x_name = x_right_aligned(font_name, name, track_name, sw, margin_right)
         baseline_name = align_baseline_to_top(draw, x_name, name, font_name, track_name, want_name_top)
         ink_name = tracked_ink_bbox(draw, x_name, baseline_name, name, font_name, track_name)
         want_url_top = ink_name[3] + gap_after_name
 
-        x_url = x_right_aligned(font_url, SITE_URL, track_url)
+        x_url = x_right_aligned(font_url, SITE_URL, track_url, sw, margin_right)
         baseline_url = align_baseline_to_top(draw, x_url, SITE_URL, font_url, track_url, want_url_top)
 
         draw_tracked_baseline(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye, FG)
         draw_tracked_baseline(draw, x_name, baseline_name, name, font_name, track_name, FG)
         draw_tracked_baseline(draw, x_url, baseline_url, SITE_URL, font_url, track_url, FG_MUTED)
+
+        # Downscale to the target LinkedIn dimensions with high-quality resampling.
+        img = img.resize((W, H), Image.LANCZOS)
 
         OUT.parent.mkdir(parents=True, exist_ok=True)
         img.save(OUT, format="PNG", optimize=True)
