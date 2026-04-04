@@ -1,7 +1,10 @@
-"""LinkedIn profile cover: 1584x396 — eyebrow, name, URL; right-aligned for mobile photo safe zone."""
+"""LinkedIn profile cover: 1584x396 — eyebrow, name, URL; right-aligned for mobile photo safe zone.
+
+Background matches site body (assets/css/main.css): dark vertical gradient; light text + link accent."""
 from __future__ import annotations
 
 import os
+import sys
 import tempfile
 from io import BytesIO
 from pathlib import Path
@@ -9,6 +12,11 @@ from urllib.request import urlopen
 
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont
+
+_SCRIPT_DIR = Path(__file__).resolve().parent
+if str(_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR))
+from linkedin_brand import FG, FG_URL, SITE_URL, vertical_site_gradient
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = Path(os.environ.get("LINKEDIN_BANNER_OUT", str(ROOT / "images" / "linkedin-banner.png")))
@@ -35,12 +43,6 @@ SCALE = 2
 MARGIN_RIGHT = 400
 # Keep the block high in the banner—extra clearance above the photo overlap.
 Y_TOP_INSET = 64
-FG = (0, 0, 0)
-# Near site --text-muted (0.58 black on white)
-FG_MUTED = (105, 105, 105)
-BG = (255, 255, 255)
-
-SITE_URL = "robertjspencer.com"
 
 
 def woff2_to_temp_path(url: str) -> str:
@@ -161,7 +163,7 @@ def main() -> None:
         track_name = -0.06
         track_url = 0.05
 
-        img = Image.new("RGB", (sw, sh), BG)
+        img = vertical_site_gradient((sw, sh))
         draw = ImageDraw.Draw(img)
 
         x_eye = x_right_aligned(font_eyebrow, eyebrow, track_eye, sw, margin_right)
@@ -179,7 +181,7 @@ def main() -> None:
 
         draw_tracked_baseline(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye, FG)
         draw_tracked_baseline(draw, x_name, baseline_name, name, font_name, track_name, FG)
-        draw_tracked_baseline(draw, x_url, baseline_url, SITE_URL, font_url, track_url, FG_MUTED)
+        draw_tracked_baseline(draw, x_url, baseline_url, SITE_URL, font_url, track_url, FG_URL)
 
         # Downscale to the target LinkedIn dimensions with high-quality resampling.
         img = img.resize((W, H), Image.LANCZOS)
