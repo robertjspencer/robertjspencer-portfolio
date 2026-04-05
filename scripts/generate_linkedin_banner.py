@@ -1,4 +1,4 @@
-"""LinkedIn profile cover: 1584x396 — eyebrow, name, URL; right-aligned for mobile photo safe zone.
+"""LinkedIn profile cover: 1584x396 — eyebrow, name, URL; vertically centred, right-aligned for photo safe zone.
 
 Background matches site body (assets/css/main.css): dark vertical gradient; light text + link accent."""
 from __future__ import annotations
@@ -41,8 +41,6 @@ SCALE = 2
 # Inset from the **right** edge. Text is right-aligned so it clears the profile photo
 # (large circle on the left on mobile; still looks fine on desktop).
 MARGIN_RIGHT = 400
-# Keep the block high in the banner—extra clearance above the photo overlap.
-Y_TOP_INSET = 64
 
 
 def woff2_to_temp_path(url: str) -> str:
@@ -137,6 +135,39 @@ def align_baseline_to_top(
     return baseline_y
 
 
+def layout_baselines(
+    draw: ImageDraw.ImageDraw,
+    sw: float,
+    margin_right: float,
+    font_eyebrow: ImageFont.FreeTypeFont,
+    font_name: ImageFont.FreeTypeFont,
+    font_url: ImageFont.FreeTypeFont,
+    eyebrow: str,
+    name: str,
+    gap: float,
+    gap_after_name: float,
+    track_eye: float,
+    track_name: float,
+    track_url: float,
+    y_top: float,
+) -> tuple[float, float, float, tuple[float, float, float, float], tuple[float, float, float, float]]:
+    """Return eyebrow, name, URL baselines and first/last line ink bboxes (for vertical centering)."""
+    x_eye = x_right_aligned(font_eyebrow, eyebrow, track_eye, sw, margin_right)
+    baseline_eye = align_baseline_to_top(draw, x_eye, eyebrow, font_eyebrow, track_eye, y_top)
+    ink_eye = tracked_ink_bbox(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye)
+    want_name_top = ink_eye[3] + gap
+
+    x_name = x_right_aligned(font_name, name, track_name, sw, margin_right)
+    baseline_name = align_baseline_to_top(draw, x_name, name, font_name, track_name, want_name_top)
+    ink_name = tracked_ink_bbox(draw, x_name, baseline_name, name, font_name, track_name)
+    want_url_top = ink_name[3] + gap_after_name
+
+    x_url = x_right_aligned(font_url, SITE_URL, track_url, sw, margin_right)
+    baseline_url = align_baseline_to_top(draw, x_url, SITE_URL, font_url, track_url, want_url_top)
+    ink_url = tracked_ink_bbox(draw, x_url, baseline_url, SITE_URL, font_url, track_url)
+    return baseline_eye, baseline_name, baseline_url, ink_eye, ink_url
+
+
 def main() -> None:
     plex_600 = woff2_to_temp_path(WOFF2_IBM_PLEX_600)
     plex_400 = woff2_to_temp_path(WOFF2_IBM_PLEX_400)
@@ -145,7 +176,6 @@ def main() -> None:
         # All pixel measurements scaled up; canvas downscaled at the end for crisp output.
         sw, sh = W * SCALE, H * SCALE
         margin_right = MARGIN_RIGHT * SCALE
-        y_top = float(Y_TOP_INSET * SCALE)
 
         eyebrow_size = 20 * SCALE
         name_size = 86 * SCALE
@@ -166,18 +196,31 @@ def main() -> None:
         img = vertical_site_gradient((sw, sh))
         draw = ImageDraw.Draw(img)
 
+        baseline_eye, baseline_name, baseline_url, ink_eye, ink_url = layout_baselines(
+            draw,
+            sw,
+            margin_right,
+            font_eyebrow,
+            font_name,
+            font_url,
+            eyebrow,
+            name,
+            gap,
+            gap_after_name,
+            track_eye,
+            track_name,
+            track_url,
+            y_top=0.0,
+        )
+        block_h = ink_url[3] - ink_eye[1]
+        v_shift = (sh - block_h) / 2 - ink_eye[1]
+        baseline_eye += v_shift
+        baseline_name += v_shift
+        baseline_url += v_shift
+
         x_eye = x_right_aligned(font_eyebrow, eyebrow, track_eye, sw, margin_right)
-        baseline_eye = align_baseline_to_top(draw, x_eye, eyebrow, font_eyebrow, track_eye, y_top)
-        ink_eye = tracked_ink_bbox(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye)
-        want_name_top = ink_eye[3] + gap
-
         x_name = x_right_aligned(font_name, name, track_name, sw, margin_right)
-        baseline_name = align_baseline_to_top(draw, x_name, name, font_name, track_name, want_name_top)
-        ink_name = tracked_ink_bbox(draw, x_name, baseline_name, name, font_name, track_name)
-        want_url_top = ink_name[3] + gap_after_name
-
         x_url = x_right_aligned(font_url, SITE_URL, track_url, sw, margin_right)
-        baseline_url = align_baseline_to_top(draw, x_url, SITE_URL, font_url, track_url, want_url_top)
 
         draw_tracked_baseline(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye, FG)
         draw_tracked_baseline(draw, x_name, baseline_name, name, font_name, track_name, FG)

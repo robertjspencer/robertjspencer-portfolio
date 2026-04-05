@@ -14,8 +14,8 @@ GRADIENT_STOPS: list[tuple[float, tuple[int, int, int]]] = [
 
 SITE_URL = "robertjspencer.com"
 FG = (255, 255, 255)
-# Site link / accent (main.css)
-FG_URL = (140, 201, 240)
+# Body text on dark bg (main.css: body { color: rgba(255, 255, 255, 0.65); })
+FG_URL = (166, 166, 166)
 
 
 def _lerp_rgb(
