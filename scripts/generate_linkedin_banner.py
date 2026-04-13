@@ -179,7 +179,7 @@ def main() -> None:
 
         eyebrow_size = 20 * SCALE
         name_size = 86 * SCALE
-        url_size = 18 * SCALE
+        url_size = 24 * SCALE
         font_eyebrow = ImageFont.truetype(plex_600, eyebrow_size)
         font_name = ImageFont.truetype(sg_path, name_size)
         font_url = ImageFont.truetype(plex_400, url_size)
