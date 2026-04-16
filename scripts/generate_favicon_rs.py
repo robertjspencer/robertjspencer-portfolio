@@ -60,8 +60,16 @@ def main() -> None:
     scale = inner / max(max_x - min_x, max_y - min_y)
 
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Robert J. Spencer">
-  <rect width="64" height="64" rx="14" fill="#000000" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
-  <g fill="#ffffff" transform="translate(32,32) scale({scale:.6f},{-scale:.6f}) translate({-cx:.3f},{-cy:.3f})">
+  <defs>
+    <radialGradient id="bg-glow" cx="0%" cy="0%" r="82%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="44%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0d1117"/>
+  <rect width="64" height="64" rx="14" fill="url(#bg-glow)"/>
+  <rect width="64" height="64" rx="14" fill="none" stroke="rgba(245,247,251,0.12)" stroke-width="1"/>
+  <g fill="#f5f7fb" transform="translate(32,32) scale({scale:.6f},{-scale:.6f}) translate({-cx:.3f},{-cy:.3f})">
     <path d="{paths["R"]}"/>
     <path transform="translate({offsets["J"]:.3f} 0)" d="{paths["J"]}"/>
     <path transform="translate({offsets["S"]:.3f} 0)" d="{paths["S"]}"/>
