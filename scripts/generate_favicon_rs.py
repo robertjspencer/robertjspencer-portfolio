@@ -1,4 +1,4 @@
-"""Write images/favicon.svg using outlined Space Grotesk 700 glyphs (no embedded fonts)."""
+"""Write images/favicon.svg as a refined Inter RJS monogram."""
 from __future__ import annotations
 
 from io import BytesIO
@@ -12,47 +12,59 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "images" / "favicon.svg"
 
 FONT_URL = (
-    "https://fonts.gstatic.com/s/spacegrotesk/v22/"
-    "V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVnskPMA.woff2"
+    "https://fonts.gstatic.com/s/inter/v20/"
+    "UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiA.woff2"
 )
+LETTERS = ("R", "J", "S")
+TRACKING = -105.0
+PAD = 10.0
 
 
 def main() -> None:
     font = TTFont(BytesIO(urlopen(FONT_URL).read()))
     gs = font.getGlyphSet()
+    glyf = font["glyf"]
+    hmtx = font["hmtx"]
 
-    pen_r = SVGPathPen(gs)
-    gs["R"].draw(pen_r)
-    d_r = pen_r.getCommands()
+    offsets: dict[str, float] = {}
+    paths: dict[str, str] = {}
+    placed_bounds: list[tuple[float, float, float, float]] = []
+    cursor_x = 0.0
 
-    pen_s = SVGPathPen(gs)
-    gs["S"].draw(pen_s)
-    d_s = pen_s.getCommands()
+    for idx, letter in enumerate(LETTERS):
+        offset = cursor_x + (TRACKING * idx)
+        offsets[letter] = offset
+        pen = SVGPathPen(gs)
+        gs[letter].draw(pen)
+        paths[letter] = pen.getCommands()
+        glyph = glyf[letter]
+        placed_bounds.append(
+            (
+                float(glyph.xMin) + offset,
+                float(glyph.yMin),
+                float(glyph.xMax) + offset,
+                float(glyph.yMax),
+            )
+        )
+        advance_width, _ = hmtx[letter]
+        cursor_x += float(advance_width)
 
-    # Horizontal offset for "S" (~-0.06em kerning vs separate default spacing)
-    s_offset_x = 494.0
-
-    rb = (66.0, 0.0, 588.0, 700.0)
-    sb = (34.0 + s_offset_x, -14.0, 574.0 + s_offset_x, 714.0)
-    min_x = min(rb[0], sb[0])
-    max_x = max(rb[2], sb[2])
-    min_y = min(rb[1], sb[1])
-    max_y = max(rb[3], sb[3])
-    w = max_x - min_x
-    h = max_y - min_y
+    min_x = min(p[0] for p in placed_bounds)
+    max_x = max(p[2] for p in placed_bounds)
+    min_y = min(p[1] for p in placed_bounds)
+    max_y = max(p[3] for p in placed_bounds)
     cx = (min_x + max_x) / 2
     cy = (min_y + max_y) / 2
 
-    pad = 6.0
-    inner = 64.0 - 2 * pad
-    scale = inner / max(w, h)
+    inner = 64.0 - (2 * PAD)
+    scale = inner / max(max_x - min_x, max_y - min_y)
 
-    # Negative Y scale: TrueType outlines use y-up; SVG uses y-down.
-    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Robert Spencer">
-  <rect width="64" height="64" rx="14" fill="#ffffff" stroke="rgba(0,0,0,0.14)" stroke-width="1"/>
-  <g fill="#000000" transform="translate(32,32) scale({scale:.6f},{-scale:.6f}) translate({-cx:.3f},{-cy:.3f})">
-    <path d="{d_r}"/>
-    <path transform="translate({s_offset_x:.3f} 0)" d="{d_s}"/>
+    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Robert J. Spencer">
+  <rect width="64" height="64" rx="14" fill="#000000" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <g fill="#ffffff" transform="translate(32,32) scale({scale:.6f},{-scale:.6f}) translate({-cx:.3f},{-cy:.3f})">
+    <path d="{paths["R"]}"/>
+    <path transform="translate({offsets["J"]:.3f} 0)" d="{paths["J"]}"/>
+    <path transform="translate({offsets["S"]:.3f} 0)" d="{paths["S"]}"/>
   </g>
 </svg>
 """
