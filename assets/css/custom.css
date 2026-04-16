@@ -254,7 +254,10 @@ h6,
 }
 
 #nav {
-	width: min(1180px, calc(100% - 3rem));
+	left: calc(50% - 50vw);
+	right: calc(50% - 50vw);
+	width: auto;
+	max-width: none;
 	background: var(--nav-bg);
 	backdrop-filter: blur(14px);
 	border-bottom: 1px solid var(--nav-border);
@@ -1020,7 +1023,7 @@ h6,
 
 @media screen and (max-width: 980px) {
 	#nav {
-		width: calc(100% - 1.5rem);
+		width: auto;
 	}
 
 	.nav-shell {
