@@ -254,7 +254,7 @@ h6,
 }
 
 #nav {
-	width: min(1120px, calc(100% - 3rem));
+	width: min(1180px, calc(100% - 3rem));
 	background: var(--nav-bg);
 	backdrop-filter: blur(14px);
 	border-bottom: 1px solid var(--nav-border);
