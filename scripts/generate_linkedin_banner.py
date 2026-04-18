@@ -1,6 +1,6 @@
 """LinkedIn profile cover: 1584x396 — eyebrow, name, URL; vertically centred, right-aligned for photo safe zone.
 
-Background matches site body (assets/css/main.css): dark vertical gradient; light text + link accent."""
+Background matches dark theme body (assets/css/custom.css): top-left radial glow on #0d1117; text colours from the same theme."""
 from __future__ import annotations
 
 import os
@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw, ImageFont
 _SCRIPT_DIR = Path(__file__).resolve().parent
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
-from linkedin_brand import FG, FG_URL, SITE_URL, vertical_site_gradient
+from linkedin_brand import FG, FG_URL, SITE_URL, site_body_background
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = Path(os.environ.get("LINKEDIN_BANNER_OUT", str(ROOT / "images" / "linkedin-banner.png")))
@@ -193,7 +193,7 @@ def main() -> None:
         track_name = -0.06
         track_url = 0.05
 
-        img = vertical_site_gradient((sw, sh))
+        img = site_body_background((sw, sh))
         draw = ImageDraw.Draw(img)
 
         baseline_eye, baseline_name, baseline_url, ink_eye, ink_url = layout_baselines(

@@ -1,4 +1,4 @@
-"""Generate LinkedIn Featured image (1200x627) matching site hero + banner styling."""
+"""Generate LinkedIn Featured image (1200x627) matching site hero + banner styling (dark theme body background)."""
 from __future__ import annotations
 
 import os
@@ -14,7 +14,7 @@ from PIL import Image, ImageDraw, ImageFont
 _SCRIPT_DIR = Path(__file__).resolve().parent
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
-from linkedin_brand import FG, FG_URL, SITE_URL, vertical_site_gradient
+from linkedin_brand import FG, FG_URL, SITE_URL, site_body_background
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = Path(os.environ.get("LINKEDIN_THUMB_OUT", str(ROOT / "images" / "linkedin-featured.png")))
@@ -133,7 +133,7 @@ def main() -> None:
         track_name = -0.06
         track_url = 0.05
 
-        img = vertical_site_gradient((sw, sh))
+        img = site_body_background((sw, sh))
         draw = ImageDraw.Draw(img)
 
         b_eye = tracked_ink_bbox(draw, margin_x, 0.0, eyebrow, font_eyebrow, track_eye)
