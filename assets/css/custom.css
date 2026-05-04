@@ -225,7 +225,7 @@ h6,
 	position: relative;
 	overflow: hidden;
 	border: 1px solid var(--border-strong);
-	border-radius: 2rem;
+	border-radius: 1.25rem;
 	background: var(--surface);
 	box-shadow: var(--shadow-lg);
 }
@@ -235,6 +235,7 @@ h6,
 	width: 100%;
 	aspect-ratio: 4 / 3;
 	object-fit: cover;
+	object-position: 75% center;
 }
 
 .hero-note {
@@ -1041,6 +1042,10 @@ h6,
 	.proof-grid,
 	.metric-band {
 		grid-template-columns: 1fr;
+	}
+
+	.hero-portrait img {
+		aspect-ratio: 1 / 1;
 	}
 
 	#header.alt {
