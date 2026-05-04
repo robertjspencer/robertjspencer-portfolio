@@ -269,9 +269,10 @@ h6,
 .hero-portrait img {
 	display: block;
 	width: 100%;
-	aspect-ratio: 4 / 3;
+	/* Taller than 4:3 so less vertical crop; bottom anchor keeps feet in frame */
+	aspect-ratio: 1 / 1;
 	object-fit: cover;
-	object-position: 75% center;
+	object-position: 75% bottom;
 }
 
 .hero-note {
@@ -1113,10 +1114,6 @@ h6,
 	.proof-grid,
 	.metric-band {
 		grid-template-columns: 1fr;
-	}
-
-	.hero-portrait img {
-		aspect-ratio: 1 / 1;
 	}
 
 	#header.alt {
