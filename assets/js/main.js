@@ -89,6 +89,47 @@
 
 		if ($nav.length > 0) {
 
+			var $navToggle = $('#nav-toggle');
+
+			function closeNavMenu() {
+				$nav.removeClass('is-open');
+
+				if ($navToggle.length > 0)
+					$navToggle.attr('aria-expanded', 'false');
+			}
+
+			if ($navToggle.length > 0) {
+				$navToggle.on('click', function() {
+					var isOpen = !$nav.hasClass('is-open');
+
+					$nav.toggleClass('is-open', isOpen);
+					$navToggle.attr('aria-expanded', isOpen ? 'true' : 'false');
+				});
+
+				$(document).on('click', function(event) {
+					if ($nav.hasClass('is-open') && $(event.target).closest('#nav').length == 0)
+						closeNavMenu();
+				});
+
+				$(document).on('keydown', function(event) {
+					if (event.key === 'Escape')
+						closeNavMenu();
+				});
+
+				if (window.matchMedia) {
+					var desktopNavQuery = window.matchMedia('(min-width: 737px)'),
+						handleDesktopNavChange = function(event) {
+							if (event.matches)
+								closeNavMenu();
+						};
+
+					if (desktopNavQuery.addEventListener)
+						desktopNavQuery.addEventListener('change', handleDesktopNavChange);
+					else if (desktopNavQuery.addListener)
+						desktopNavQuery.addListener(handleDesktopNavChange);
+				}
+			}
+
 			// Shrink effect.
 				$main
 					.scrollex({
@@ -112,6 +153,8 @@
 					.on('click', function() {
 
 						var $this = $(this);
+
+						closeNavMenu();
 
 						// External link? Bail.
 							if ($this.attr('href').charAt(0) != '#')

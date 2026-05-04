@@ -154,6 +154,7 @@ h4,
 h5,
 h6,
 #nav ul li a,
+.nav-toggle,
 .button {
 	font-family: 'Space Grotesk', sans-serif;
 	letter-spacing: -0.04em;
@@ -356,6 +357,32 @@ h6,
 #nav ul li a.active {
 	background: var(--nav-active-bg);
 	color: var(--nav-active-text) !important;
+}
+
+.nav-toggle {
+	display: none;
+	align-items: center;
+	justify-content: center;
+	min-height: 2.6rem;
+	padding: 0 1rem;
+	border: 1px solid var(--border-strong);
+	border-radius: 999px;
+	background: var(--surface);
+	color: var(--text-strong) !important;
+	font-size: 0.9rem;
+	font-weight: 600;
+	line-height: 1;
+	cursor: pointer;
+	transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-toggle:hover {
+	background: var(--button-secondary-hover);
+}
+
+.nav-toggle:focus-visible {
+	outline: 2px solid var(--text-strong);
+	outline-offset: 3px;
 }
 
 .theme-toggle {
@@ -1026,6 +1053,7 @@ h6,
 @media screen and (min-width: 981px) {
 	.journey-interleaved-main {
 		display: grid;
+		grid-auto-flow: row dense;
 		grid-template-columns: minmax(0, 1.15fr) minmax(280px, 1fr);
 		column-gap: 2rem;
 		row-gap: 1.4rem;
@@ -1050,6 +1078,14 @@ h6,
 	.journey-interleaved-main > .timeline-item {
 		position: relative;
 		z-index: 1;
+	}
+
+	.journey-interleaved-main > .journey-media-cell {
+		grid-column: 1;
+	}
+
+	.journey-interleaved-main > .timeline-item {
+		grid-column: 2;
 	}
 
 	.journey-media-cell--empty {
@@ -1104,71 +1140,20 @@ h6,
 		gap: 0.45rem;
 	}
 
-	/* Journey: narrative first, then figure (DOM is media → text; order flips on small screens) */
 	.journey-interleaved-main {
 		gap: 0;
 	}
 
-	/* Pair DOM order M,T → visual T,M (unique order values; max 6 pairs = 12 children) */
-	.journey-interleaved-main > :nth-child(1) {
-		order: 2;
-	}
-	.journey-interleaved-main > :nth-child(2) {
-		order: 1;
-	}
-	.journey-interleaved-main > :nth-child(3) {
-		order: 4;
-	}
-	.journey-interleaved-main > :nth-child(4) {
-		order: 3;
-	}
-	.journey-interleaved-main > :nth-child(5) {
-		order: 6;
-	}
-	.journey-interleaved-main > :nth-child(6) {
-		order: 5;
-	}
-	.journey-interleaved-main > :nth-child(7) {
-		order: 8;
-	}
-	.journey-interleaved-main > :nth-child(8) {
-		order: 7;
-	}
-	.journey-interleaved-main > :nth-child(9) {
-		order: 10;
-	}
-	.journey-interleaved-main > :nth-child(10) {
-		order: 9;
-	}
-	.journey-interleaved-main > :nth-child(11) {
-		order: 12;
-	}
-	.journey-interleaved-main > :nth-child(12) {
-		order: 11;
-	}
-	.journey-interleaved-main > :nth-child(13) {
-		order: 14;
-	}
-	.journey-interleaved-main > :nth-child(14) {
-		order: 13;
-	}
-	.journey-interleaved-main > :nth-child(15) {
-		order: 16;
-	}
-	.journey-interleaved-main > :nth-child(16) {
-		order: 15;
-	}
-
-	.journey-interleaved-main > .timeline-item:nth-child(2n) {
+	.journey-interleaved-main > .timeline-item:nth-child(2n-1) {
 		padding-bottom: 0.1rem;
 		margin-bottom: 0.15rem;
 	}
 
-	.journey-interleaved-main > .journey-media-cell:not(.journey-media-cell--empty):nth-child(2n-1) {
+	.journey-interleaved-main > .journey-media-cell:not(.journey-media-cell--empty):nth-child(2n) {
 		margin-bottom: 1.65rem;
 	}
 
-	.journey-interleaved-main > .journey-media-cell:not(.journey-media-cell--empty):nth-last-child(2) {
+	.journey-interleaved-main > .journey-media-cell:not(.journey-media-cell--empty):last-child {
 		margin-bottom: 0;
 	}
 
@@ -1216,11 +1201,58 @@ h6,
 
 	.nav-shell {
 		width: auto;
-		display: block;
+		position: relative;
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-end;
+		gap: 0.5rem;
 	}
 
 	#nav .nav-links {
 		display: none;
+		position: absolute;
+		top: calc(100% + 0.6rem);
+		right: 0;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0.2rem;
+		min-width: min(16rem, calc(100vw - 1.5rem));
+		max-height: calc(100dvh - 5rem);
+		margin: 0;
+		padding: 0.5rem;
+		overflow-y: auto;
+		border: 1px solid var(--nav-border);
+		border-radius: 1rem;
+		background: var(--nav-bg);
+		backdrop-filter: blur(12px);
+		box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18);
+	}
+
+	#nav.is-open .nav-links {
+		display: flex;
+	}
+
+	#nav .nav-links li {
+		width: 100%;
+	}
+
+	#nav ul li a {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		width: 100%;
+		height: auto;
+		min-height: 2.5rem;
+		padding: 0.7rem 0.8rem;
+		line-height: 1.2;
+		text-align: left;
+	}
+
+	.nav-toggle {
+		display: inline-flex;
+		background: var(--nav-bg);
+		backdrop-filter: blur(12px);
+		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
 	}
 
 	.theme-toggle {
@@ -1296,6 +1328,11 @@ h6,
 	.theme-toggle {
 		min-height: 2.4rem;
 		min-width: 2.4rem;
+	}
+
+	.nav-toggle {
+		min-height: 2.4rem;
+		padding: 0 0.85rem;
 	}
 }
 
