@@ -1,6 +1,7 @@
 """Write images/favicon.svg as a refined Inter RJS monogram."""
 from __future__ import annotations
 
+import sys
 from io import BytesIO
 from pathlib import Path
 from urllib.request import urlopen
@@ -8,8 +9,18 @@ from urllib.request import urlopen
 from fontTools.pens.svgPathPen import SVGPathPen
 from fontTools.ttLib import TTFont
 
+_SCRIPT_DIR = Path(__file__).resolve().parent
+if str(_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR))
+from linkedin_brand import BG_PAGE, GLOW_ALPHA, GLOW_STOP
+
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "images" / "favicon.svg"
+
+ICON = 64.0
+# Same radial metric as scripts/linkedin_brand.site_body_background: p = distance / hypot(w,h), fade over p<GLOW_STOP
+_BG_HEX = "#{0:02x}{1:02x}{2:02x}".format(*BG_PAGE)
+_GLOW_RADIUS = GLOW_STOP * (ICON**2 + ICON**2) ** 0.5
 
 FONT_URL = (
     "https://fonts.gstatic.com/s/inter/v20/"
@@ -56,20 +67,20 @@ def main() -> None:
     cx = (min_x + max_x) / 2
     cy = (min_y + max_y) / 2
 
-    inner = 64.0 - (2 * PAD)
+    inner = ICON - (2 * PAD)
     scale = inner / max(max_x - min_x, max_y - min_y)
 
-    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Robert J. Spencer">
+    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {ICON:.0f} {ICON:.0f}" role="img" aria-label="Robert J. Spencer">
   <defs>
-    <radialGradient id="bg-glow" cx="0%" cy="0%" r="82%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.16"/>
-      <stop offset="44%" stop-color="#ffffff" stop-opacity="0"/>
+    <radialGradient id="bg-glow" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="{_GLOW_RADIUS:.4f}">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="{GLOW_ALPHA}"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
     </radialGradient>
   </defs>
-  <rect width="64" height="64" rx="14" fill="#0d1117"/>
-  <rect width="64" height="64" rx="14" fill="url(#bg-glow)"/>
-  <rect width="64" height="64" rx="14" fill="none" stroke="rgba(245,247,251,0.12)" stroke-width="1"/>
-  <g fill="#f5f7fb" transform="translate(32,32) scale({scale:.6f},{-scale:.6f}) translate({-cx:.3f},{-cy:.3f})">
+  <rect width="{ICON:.0f}" height="{ICON:.0f}" rx="14" fill="{_BG_HEX}"/>
+  <rect width="{ICON:.0f}" height="{ICON:.0f}" rx="14" fill="url(#bg-glow)"/>
+  <rect width="{ICON:.0f}" height="{ICON:.0f}" rx="14" fill="none" stroke="rgba(245,247,251,0.12)" stroke-width="1"/>
+  <g fill="#f5f7fb" transform="translate({ICON/2:.0f},{ICON/2:.0f}) scale({scale:.6f},{-scale:.6f}) translate({-cx:.3f},{-cy:.3f})">
     <path d="{paths["R"]}"/>
     <path transform="translate({offsets["J"]:.3f} 0)" d="{paths["J"]}"/>
     <path transform="translate({offsets["S"]:.3f} 0)" d="{paths["S"]}"/>
