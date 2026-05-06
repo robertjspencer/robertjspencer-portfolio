@@ -1,7 +1,7 @@
 """Shared background and colors for LinkedIn asset scripts.
 
-Background matches :root[data-theme='dark'] body in assets/css/custom.css:
-radial-gradient(circle at top left, var(--bg-glow), transparent 32%) over var(--bg-page).
+Background follows the dark theme body (radial glow top-left over --bg-page);
+glow strength and stop are increased vs the site so the gradient reads clearly in LinkedIn exports.
 """
 
 from __future__ import annotations
@@ -10,9 +10,9 @@ from PIL import Image
 
 # :root[data-theme='dark'] — assets/css/custom.css
 BG_PAGE = (0x0D, 0x11, 0x17)  # --bg-page #0d1117
-# --bg-glow: rgba(255, 255, 255, 0.07) painted over BG_PAGE, fading out by transparent 32%
-GLOW_ALPHA = 0.07
-GLOW_STOP = 0.32
+# Site uses --bg-glow rgba(255,255,255,0.07) and ~32% stop; asset export bumps both so the corner reads on LinkedIn.
+GLOW_ALPHA = 0.16
+GLOW_STOP = 0.44
 
 SITE_URL = "robertjspencer.com"
 # --text-strong #f5f7fb
