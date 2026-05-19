@@ -14,7 +14,7 @@ from PIL import Image, ImageDraw, ImageFont
 _SCRIPT_DIR = Path(__file__).resolve().parent
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
-from linkedin_brand import FG, FG_URL, SITE_URL, site_body_background
+from linkedin_brand import DISPLAY_NAME, FG, FG_URL, SITE_URL, site_body_background
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = Path(os.environ.get("LINKEDIN_THUMB_OUT", str(ROOT / "images" / "linkedin-featured.png")))
@@ -125,7 +125,7 @@ def main() -> None:
         font_url = ImageFont.truetype(plex_400, url_size)
 
         eyebrow = "RESEARCHER + BUILDER"
-        name = "Robert Spencer"
+        name = DISPLAY_NAME
         gap = 26 * SCALE
         gap_after_name = 16 * SCALE
 

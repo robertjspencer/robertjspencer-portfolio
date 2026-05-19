@@ -1,4 +1,4 @@
-"""LinkedIn profile cover: 1584x396 — eyebrow, name, URL; vertically centred, right-aligned for photo safe zone.
+"""LinkedIn profile cover: 1584x396 — eyebrow/name centred, URL tucked bottom-right.
 
 Background matches dark theme body (assets/css/custom.css): top-left radial glow on #0d1117; text colours from the same theme."""
 from __future__ import annotations
@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw, ImageFont
 _SCRIPT_DIR = Path(__file__).resolve().parent
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
-from linkedin_brand import FG, FG_URL, SITE_URL, site_body_background
+from linkedin_brand import DISPLAY_NAME, FG, FG_URL, SITE_URL, site_body_background
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = Path(os.environ.get("LINKEDIN_BANNER_OUT", str(ROOT / "images" / "linkedin-banner.png")))
@@ -41,6 +41,8 @@ SCALE = 2
 # Inset from the **right** edge. Text is right-aligned so it clears the profile photo
 # (large circle on the left on mobile; still looks fine on desktop).
 MARGIN_RIGHT = 400
+URL_MARGIN_RIGHT = 72
+URL_MARGIN_BOTTOM = 42
 
 
 def woff2_to_temp_path(url: str) -> str:
@@ -135,23 +137,38 @@ def align_baseline_to_top(
     return baseline_y
 
 
+def align_baseline_to_bottom(
+    draw: ImageDraw.ImageDraw,
+    x: float,
+    text: str,
+    font: ImageFont.FreeTypeFont,
+    tracking_em: float,
+    want_bottom: float,
+) -> float:
+    baseline_y = want_bottom
+    for _ in range(12):
+        _l, _top, _r, bottom = tracked_ink_bbox(draw, x, baseline_y, text, font, tracking_em)
+        shift = want_bottom - bottom
+        baseline_y += shift
+        if abs(shift) < 0.25:
+            break
+    return baseline_y
+
+
 def layout_baselines(
     draw: ImageDraw.ImageDraw,
     sw: float,
     margin_right: float,
     font_eyebrow: ImageFont.FreeTypeFont,
     font_name: ImageFont.FreeTypeFont,
-    font_url: ImageFont.FreeTypeFont,
     eyebrow: str,
     name: str,
     gap: float,
-    gap_after_name: float,
     track_eye: float,
     track_name: float,
-    track_url: float,
     y_top: float,
-) -> tuple[float, float, float, tuple[float, float, float, float], tuple[float, float, float, float]]:
-    """Return eyebrow, name, URL baselines and first/last line ink bboxes (for vertical centering)."""
+) -> tuple[float, float, tuple[float, float, float, float], tuple[float, float, float, float]]:
+    """Return eyebrow/name baselines and ink bboxes for vertical centering."""
     x_eye = x_right_aligned(font_eyebrow, eyebrow, track_eye, sw, margin_right)
     baseline_eye = align_baseline_to_top(draw, x_eye, eyebrow, font_eyebrow, track_eye, y_top)
     ink_eye = tracked_ink_bbox(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye)
@@ -160,12 +177,7 @@ def layout_baselines(
     x_name = x_right_aligned(font_name, name, track_name, sw, margin_right)
     baseline_name = align_baseline_to_top(draw, x_name, name, font_name, track_name, want_name_top)
     ink_name = tracked_ink_bbox(draw, x_name, baseline_name, name, font_name, track_name)
-    want_url_top = ink_name[3] + gap_after_name
-
-    x_url = x_right_aligned(font_url, SITE_URL, track_url, sw, margin_right)
-    baseline_url = align_baseline_to_top(draw, x_url, SITE_URL, font_url, track_url, want_url_top)
-    ink_url = tracked_ink_bbox(draw, x_url, baseline_url, SITE_URL, font_url, track_url)
-    return baseline_eye, baseline_name, baseline_url, ink_eye, ink_url
+    return baseline_eye, baseline_name, ink_eye, ink_name
 
 
 def main() -> None:
@@ -185,9 +197,8 @@ def main() -> None:
         font_url = ImageFont.truetype(plex_400, url_size)
 
         eyebrow = "RESEARCHER + BUILDER"
-        name = "Robert Spencer"
+        name = DISPLAY_NAME
         gap = 22 * SCALE
-        gap_after_name = 14 * SCALE
 
         track_eye = 0.16
         track_name = -0.06
@@ -196,31 +207,35 @@ def main() -> None:
         img = site_body_background((sw, sh))
         draw = ImageDraw.Draw(img)
 
-        baseline_eye, baseline_name, baseline_url, ink_eye, ink_url = layout_baselines(
+        baseline_eye, baseline_name, ink_eye, ink_name = layout_baselines(
             draw,
             sw,
             margin_right,
             font_eyebrow,
             font_name,
-            font_url,
             eyebrow,
             name,
             gap,
-            gap_after_name,
             track_eye,
             track_name,
-            track_url,
             y_top=0.0,
         )
-        block_h = ink_url[3] - ink_eye[1]
+        block_h = ink_name[3] - ink_eye[1]
         v_shift = (sh - block_h) / 2 - ink_eye[1]
         baseline_eye += v_shift
         baseline_name += v_shift
-        baseline_url += v_shift
 
         x_eye = x_right_aligned(font_eyebrow, eyebrow, track_eye, sw, margin_right)
         x_name = x_right_aligned(font_name, name, track_name, sw, margin_right)
-        x_url = x_right_aligned(font_url, SITE_URL, track_url, sw, margin_right)
+        x_url = x_right_aligned(font_url, SITE_URL, track_url, sw, URL_MARGIN_RIGHT * SCALE)
+        baseline_url = align_baseline_to_bottom(
+            draw,
+            x_url,
+            SITE_URL,
+            font_url,
+            track_url,
+            sh - URL_MARGIN_BOTTOM * SCALE,
+        )
 
         draw_tracked_baseline(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye, FG)
         draw_tracked_baseline(draw, x_name, baseline_name, name, font_name, track_name, FG)

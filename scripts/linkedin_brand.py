@@ -14,6 +14,7 @@ BG_PAGE = (0x0D, 0x11, 0x17)  # --bg-page #0d1117
 GLOW_ALPHA = 0.16
 GLOW_STOP = 0.44
 
+DISPLAY_NAME = "Robert Spencer."
 SITE_URL = "robertjspencer.com"
 # --text-strong #f5f7fb
 FG = (0xF5, 0xF7, 0xFB)
