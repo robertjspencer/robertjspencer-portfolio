@@ -9,6 +9,7 @@ from pathlib import Path
 from urllib.request import urlopen
 
 from fontTools.ttLib import TTFont
+import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
@@ -109,6 +110,159 @@ def align_baseline_to_top(
     return baseline_y
 
 
+def align_x_to_ink_left(
+    draw: ImageDraw.ImageDraw,
+    target_left: float,
+    baseline_y: float,
+    text: str,
+    font: ImageFont.FreeTypeFont,
+    tracking_em: float,
+) -> float:
+    """Return x so the line's visible ink starts at target_left on this baseline."""
+    x = target_left
+    for _ in range(12):
+        left, _top, _right, _bottom = tracked_ink_bbox(
+            draw, x, baseline_y, text, font, tracking_em
+        )
+        shift = target_left - left
+        x += shift
+        if abs(shift) < 0.25:
+            break
+    return x
+
+
+def layout_featured_block(
+    draw: ImageDraw.ImageDraw,
+    margin_x: float,
+    font_eyebrow: ImageFont.FreeTypeFont,
+    font_name: ImageFont.FreeTypeFont,
+    font_url: ImageFont.FreeTypeFont,
+    eyebrow: str,
+    name: str,
+    gap: float,
+    gap_after_name: float,
+    track_eye: float,
+    track_name: float,
+    track_url: float,
+    canvas_h: float,
+) -> tuple[float, float, float, float, float, float]:
+    """Lay out eyebrow, name, and URL with a shared ink-left edge from the name line."""
+    x_name = align_x_to_ink_left(draw, margin_x, 0.0, name, font_name, track_name)
+    b_eye = tracked_ink_bbox(draw, x_name, 0.0, eyebrow, font_eyebrow, track_eye)
+    b_name = tracked_ink_bbox(draw, x_name, 0.0, name, font_name, track_name)
+    b_url = tracked_ink_bbox(draw, x_name, 0.0, SITE_URL, font_url, track_url)
+    block_h = (
+        (b_eye[3] - b_eye[1])
+        + gap
+        + (b_name[3] - b_name[1])
+        + gap_after_name
+        + (b_url[3] - b_url[1])
+    )
+    y_top = (canvas_h - block_h) / 2
+
+    baseline_eye = align_baseline_to_top(
+        draw, x_name, eyebrow, font_eyebrow, track_eye, y_top
+    )
+    ink_eye = tracked_ink_bbox(draw, x_name, baseline_eye, eyebrow, font_eyebrow, track_eye)
+    want_name_top = ink_eye[3] + gap
+    baseline_name = align_baseline_to_top(
+        draw, x_name, name, font_name, track_name, want_name_top
+    )
+    ink_name = tracked_ink_bbox(draw, x_name, baseline_name, name, font_name, track_name)
+    ref_left = ink_name[0]
+    x_eye = align_x_to_ink_left(
+        draw, ref_left, baseline_eye, eyebrow, font_eyebrow, track_eye
+    )
+    x_name = align_x_to_ink_left(
+        draw, ref_left, baseline_name, name, font_name, track_name
+    )
+    want_url_top = ink_name[3] + gap_after_name
+    baseline_url = align_baseline_to_top(
+        draw, x_name, SITE_URL, font_url, track_url, want_url_top
+    )
+    x_url = align_x_to_ink_left(
+        draw, ref_left, baseline_url, SITE_URL, font_url, track_url
+    )
+    return x_eye, baseline_eye, x_name, baseline_name, x_url, baseline_url
+
+
+def pixel_left_edge(
+    img: Image.Image,
+    ink_bbox: tuple[float, float, float, float],
+    *,
+    pad: int = 2,
+    threshold: int | None = None,
+) -> float | None:
+    """Leftmost bright pixel in a text band (matches what the eye sees after rasterisation)."""
+    y0 = max(0, int(ink_bbox[1]) - pad)
+    y1 = min(img.height, int(ink_bbox[3]) + pad)
+    if y1 <= y0:
+        return None
+    if threshold is None:
+        threshold = 200
+    band = np.asarray(img)[y0:y1]
+    if band.ndim == 3:
+        bright = band.max(axis=2) > threshold
+    else:
+        bright = band > threshold
+    cols = np.where(bright)
+    if not cols[0].size:
+        return None
+    return float(cols[1].min())
+
+
+def render_featured(
+    sw: int,
+    sh: int,
+    margin_x: float,
+    font_eyebrow: ImageFont.FreeTypeFont,
+    font_name: ImageFont.FreeTypeFont,
+    font_url: ImageFont.FreeTypeFont,
+    eyebrow: str,
+    name: str,
+    gap: float,
+    gap_after_name: float,
+    track_eye: float,
+    track_name: float,
+    track_url: float,
+    *,
+    shift_x: float = 0.0,
+    shift_x_url: float = 0.0,
+) -> tuple[
+    Image.Image,
+    tuple[float, float, float, float],
+    tuple[float, float, float, float],
+    tuple[float, float, float, float],
+]:
+    """Render the featured frame; shift_x nudges name, shift_x_url nudges the URL line."""
+    img = site_body_background((sw, sh))
+    draw = ImageDraw.Draw(img)
+    x_eye, baseline_eye, x_name, baseline_name, x_url, baseline_url = layout_featured_block(
+        draw,
+        margin_x,
+        font_eyebrow,
+        font_name,
+        font_url,
+        eyebrow,
+        name,
+        gap,
+        gap_after_name,
+        track_eye,
+        track_name,
+        track_url,
+        sh,
+    )
+    x_name += shift_x
+    x_url += shift_x + shift_x_url
+    draw_tracked_baseline(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye, FG)
+    draw_tracked_baseline(draw, x_name, baseline_name, name, font_name, track_name, FG)
+    draw_tracked_baseline(draw, x_url, baseline_url, SITE_URL, font_url, track_url, FG_URL)
+    ink_eye = tracked_ink_bbox(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye)
+    ink_name = tracked_ink_bbox(draw, x_name, baseline_name, name, font_name, track_name)
+    ink_url = tracked_ink_bbox(draw, x_url, baseline_url, SITE_URL, font_url, track_url)
+    return img, ink_eye, ink_name, ink_url
+
+
 def main() -> None:
     plex_600 = woff2_to_temp_path(WOFF2_IBM_PLEX_600)
     plex_400 = woff2_to_temp_path(WOFF2_IBM_PLEX_400)
@@ -133,38 +287,73 @@ def main() -> None:
         track_name = -0.06
         track_url = 0.05
 
-        img = site_body_background((sw, sh))
-        draw = ImageDraw.Draw(img)
-
-        b_eye = tracked_ink_bbox(draw, margin_x, 0.0, eyebrow, font_eyebrow, track_eye)
-        b_name = tracked_ink_bbox(draw, margin_x, 0.0, name, font_name, track_name)
-        b_url = tracked_ink_bbox(draw, margin_x, 0.0, SITE_URL, font_url, track_url)
-        block_h = (
-            (b_eye[3] - b_eye[1])
-            + gap
-            + (b_name[3] - b_name[1])
-            + gap_after_name
-            + (b_url[3] - b_url[1])
+        shift_x = 0.0
+        shift_x_url = 0.0
+        img, ink_eye, ink_name, _ink_url = render_featured(
+            sw,
+            sh,
+            margin_x,
+            font_eyebrow,
+            font_name,
+            font_url,
+            eyebrow,
+            name,
+            gap,
+            gap_after_name,
+            track_eye,
+            track_name,
+            track_url,
         )
-        y_top = (sh - block_h) / 2
-
-        baseline_eye = align_baseline_to_top(
-            draw, margin_x, eyebrow, font_eyebrow, track_eye, y_top
-        )
-        ink_eye = tracked_ink_bbox(draw, margin_x, baseline_eye, eyebrow, font_eyebrow, track_eye)
-        want_name_top = ink_eye[3] + gap
-        baseline_name = align_baseline_to_top(
-            draw, margin_x, name, font_name, track_name, want_name_top
-        )
-        ink_name = tracked_ink_bbox(draw, margin_x, baseline_name, name, font_name, track_name)
-        want_url_top = ink_name[3] + gap_after_name
-        baseline_url = align_baseline_to_top(
-            draw, margin_x, SITE_URL, font_url, track_url, want_url_top
-        )
-
-        draw_tracked_baseline(draw, margin_x, baseline_eye, eyebrow, font_eyebrow, track_eye, FG)
-        draw_tracked_baseline(draw, margin_x, baseline_name, name, font_name, track_name, FG)
-        draw_tracked_baseline(draw, margin_x, baseline_url, SITE_URL, font_url, track_url, FG_URL)
+        pl_eye = pixel_left_edge(img, ink_eye)
+        pl_name = pixel_left_edge(img, ink_name)
+        if pl_eye is not None and pl_name is not None:
+            dx = pl_name - pl_eye
+            if abs(dx) >= 2:
+                shift_x = -dx
+        if shift_x:
+            img, ink_eye, ink_name, ink_url = render_featured(
+                sw,
+                sh,
+                margin_x,
+                font_eyebrow,
+                font_name,
+                font_url,
+                eyebrow,
+                name,
+                gap,
+                gap_after_name,
+                track_eye,
+                track_name,
+                track_url,
+                shift_x=shift_x,
+            )
+        else:
+            ink_url = _ink_url
+        url_threshold = int(min(FG_URL) * 0.72)
+        pl_eye = pixel_left_edge(img, ink_eye)
+        pl_url = pixel_left_edge(img, ink_url, threshold=url_threshold)
+        if pl_eye is not None and pl_url is not None:
+            dx_url = pl_url - pl_eye
+            if abs(dx_url) >= 2:
+                shift_x_url = -dx_url
+        if shift_x_url:
+            img, _, _, _ = render_featured(
+                sw,
+                sh,
+                margin_x,
+                font_eyebrow,
+                font_name,
+                font_url,
+                eyebrow,
+                name,
+                gap,
+                gap_after_name,
+                track_eye,
+                track_name,
+                track_url,
+                shift_x=shift_x,
+                shift_x_url=shift_x_url,
+            )
 
         img = img.resize((W, H), Image.LANCZOS)
 
