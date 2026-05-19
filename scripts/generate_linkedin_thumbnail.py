@@ -36,7 +36,8 @@ WOFF2_SPACE_GROTESK_700 = (
 W, H = 1200, 627
 # Render at 2× then downscale with LANCZOS for crisp sub-pixel anti-aliasing.
 SCALE = 2
-MARGIN_X = 180
+# Between original 180 (too far right) and 140 (still a touch left for the card).
+MARGIN_X = 160
 
 
 def woff2_to_temp_path(url: str) -> str:
