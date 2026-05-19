@@ -11,6 +11,7 @@ from pathlib import Path
 from urllib.request import urlopen
 
 from fontTools.ttLib import TTFont
+import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
@@ -180,6 +181,92 @@ def layout_baselines(
     return baseline_eye, baseline_name, ink_eye, ink_name
 
 
+def pixel_right_edge(
+    img: Image.Image,
+    ink_bbox: tuple[float, float, float, float],
+    *,
+    pad: int = 2,
+    threshold: int = 200,
+) -> float | None:
+    """Rightmost bright pixel in a text band (post-rasterisation)."""
+    y0 = max(0, int(ink_bbox[1]) - pad)
+    y1 = min(img.height, int(ink_bbox[3]) + pad)
+    if y1 <= y0:
+        return None
+    band = np.asarray(img)[y0:y1]
+    if band.ndim == 3:
+        bright = band.max(axis=2) > threshold
+    else:
+        bright = band > threshold
+    cols = np.where(bright)
+    if not cols[0].size:
+        return None
+    return float(cols[1].max())
+
+
+def render_banner_block(
+    sw: float,
+    sh: float,
+    margin_right: float,
+    font_eyebrow: ImageFont.FreeTypeFont,
+    font_name: ImageFont.FreeTypeFont,
+    font_url: ImageFont.FreeTypeFont,
+    eyebrow: str,
+    name: str,
+    gap: float,
+    track_eye: float,
+    track_name: float,
+    track_url: float,
+    *,
+    shift_x_name: float = 0.0,
+) -> tuple[
+    Image.Image,
+    tuple[float, float, float, float],
+    tuple[float, float, float, float],
+]:
+    """Draw eyebrow/name block (right-aligned) and bottom-right URL."""
+    img = site_body_background((int(sw), int(sh)))
+    draw = ImageDraw.Draw(img)
+
+    baseline_eye, baseline_name, ink_eye, ink_name = layout_baselines(
+        draw,
+        sw,
+        margin_right,
+        font_eyebrow,
+        font_name,
+        eyebrow,
+        name,
+        gap,
+        track_eye,
+        track_name,
+        y_top=0.0,
+    )
+    block_h = ink_name[3] - ink_eye[1]
+    v_shift = (sh - block_h) / 2 - ink_eye[1]
+    baseline_eye += v_shift
+    baseline_name += v_shift
+
+    x_eye = x_right_aligned(font_eyebrow, eyebrow, track_eye, sw, margin_right)
+    x_name = x_right_aligned(font_name, name, track_name, sw, margin_right) + shift_x_name
+    x_url = x_right_aligned(font_url, SITE_URL, track_url, sw, URL_MARGIN_RIGHT * SCALE)
+    baseline_url = align_baseline_to_bottom(
+        draw,
+        x_url,
+        SITE_URL,
+        font_url,
+        track_url,
+        sh - URL_MARGIN_BOTTOM * SCALE,
+    )
+
+    draw_tracked_baseline(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye, FG)
+    draw_tracked_baseline(draw, x_name, baseline_name, name, font_name, track_name, FG)
+    draw_tracked_baseline(draw, x_url, baseline_url, SITE_URL, font_url, track_url, FG_URL)
+
+    ink_eye = tracked_ink_bbox(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye)
+    ink_name = tracked_ink_bbox(draw, x_name, baseline_name, name, font_name, track_name)
+    return img, ink_eye, ink_name
+
+
 def main() -> None:
     plex_600 = woff2_to_temp_path(WOFF2_IBM_PLEX_600)
     plex_400 = woff2_to_temp_path(WOFF2_IBM_PLEX_400)
@@ -204,44 +291,41 @@ def main() -> None:
         track_name = -0.06
         track_url = 0.05
 
-        img = site_body_background((sw, sh))
-        draw = ImageDraw.Draw(img)
-
-        baseline_eye, baseline_name, ink_eye, ink_name = layout_baselines(
-            draw,
+        img, ink_eye, ink_name = render_banner_block(
             sw,
+            sh,
             margin_right,
             font_eyebrow,
             font_name,
+            font_url,
             eyebrow,
             name,
             gap,
             track_eye,
             track_name,
-            y_top=0.0,
-        )
-        block_h = ink_name[3] - ink_eye[1]
-        v_shift = (sh - block_h) / 2 - ink_eye[1]
-        baseline_eye += v_shift
-        baseline_name += v_shift
-
-        x_eye = x_right_aligned(font_eyebrow, eyebrow, track_eye, sw, margin_right)
-        x_name = x_right_aligned(font_name, name, track_name, sw, margin_right)
-        x_url = x_right_aligned(font_url, SITE_URL, track_url, sw, URL_MARGIN_RIGHT * SCALE)
-        baseline_url = align_baseline_to_bottom(
-            draw,
-            x_url,
-            SITE_URL,
-            font_url,
             track_url,
-            sh - URL_MARGIN_BOTTOM * SCALE,
         )
+        pr_eye = pixel_right_edge(img, ink_eye)
+        pr_name = pixel_right_edge(img, ink_name)
+        if pr_eye is not None and pr_name is not None:
+            dx = pr_eye - pr_name
+            if abs(dx) >= 2:
+                img, _, _ = render_banner_block(
+                    sw,
+                    sh,
+                    margin_right,
+                    font_eyebrow,
+                    font_name,
+                    font_url,
+                    eyebrow,
+                    name,
+                    gap,
+                    track_eye,
+                    track_name,
+                    track_url,
+                    shift_x_name=dx,
+                )
 
-        draw_tracked_baseline(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye, FG)
-        draw_tracked_baseline(draw, x_name, baseline_name, name, font_name, track_name, FG)
-        draw_tracked_baseline(draw, x_url, baseline_url, SITE_URL, font_url, track_url, FG_URL)
-
-        # Downscale to the target LinkedIn dimensions with high-quality resampling.
         img = img.resize((W, H), Image.LANCZOS)
 
         OUT.parent.mkdir(parents=True, exist_ok=True)
