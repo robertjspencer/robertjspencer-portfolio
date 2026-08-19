@@ -1,80 +1,146 @@
-"""LinkedIn profile cover: 1584x396 — eyebrow/name centred, URL tucked bottom-right.
+"""LinkedIn profile cover: 1584x396.
 
-Background matches dark theme body (assets/css/custom.css): top-left radial glow on #0d1117; text colours from the same theme."""
+Uniform near-black field. Left ~0–430px stays empty for the profile-photo
+overlap (blank, not a separate colour block). Copy is left-aligned in the
+main band. A sparse clustered network sits in the right third at low opacity.
+"""
 from __future__ import annotations
 
+import math
 import os
+import re
 import sys
 import tempfile
 from io import BytesIO
 from pathlib import Path
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 
-from fontTools.ttLib import TTFont
 import numpy as np
+from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
-from linkedin_brand import DISPLAY_NAME, FG, FG_URL, SITE_URL, site_body_background
+from linkedin_brand import BG_PAGE, FG, SITE_URL
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = Path(os.environ.get("LINKEDIN_BANNER_OUT", str(ROOT / "images" / "linkedin-banner.png")))
 
-WOFF2_IBM_PLEX_600 = (
-    "https://fonts.gstatic.com/s/ibmplexsans/v23/"
-    "zYXGKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1swZSAXcomDVmadSDNF5DB6g4.woff2"
-)
-WOFF2_IBM_PLEX_400 = (
-    "https://fonts.gstatic.com/s/ibmplexsans/v23/"
-    "zYXGKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1swZSAXcomDVmadSD6llDB6g4.woff2"
-)
-WOFF2_SPACE_GROTESK_700 = (
-    "https://fonts.gstatic.com/s/spacegrotesk/v22/"
-    "V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVnskPMA.woff2"
-)
-
 # LinkedIn cover (recommended): https://www.linkedin.com/help/linkedin/answer/a568217
 W, H = 1584, 396
-# Render at 2× then downscale with LANCZOS for crisp sub-pixel anti-aliasing.
 SCALE = 2
-# Inset from the **right** edge. Text is right-aligned so it clears the profile photo
-# (large circle on the left on mobile; still looks fine on desktop).
-MARGIN_RIGHT = 400
-URL_MARGIN_RIGHT = 72
-URL_MARGIN_BOTTOM = 42
+
+UA = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/120.0 Safari/537.36"
+)
+
+# Inter via Google Fonts css2 (latin subset is the last @font-face block).
+INTER_CSS = {
+    400: "https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap",
+    500: "https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap",
+    600: "https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap",
+}
+
+# Light grey eyebrow; descriptor secondary but readable; URL tertiary.
+FG_EYEBROW = (176, 183, 194)
+FG_DESCRIPTOR = (132, 140, 152)
+FG_URL = (156, 163, 174)
+
+# Figma-style tops (1× px). Clear of the profile-photo overlay; nudged left of
+# the 590 band after the type size increase so the block doesn't crowd the right.
+X_COPY = 566
+X_LOWER = 568
+Y_EYEBROW = 82
+Y_HERO = 115
+Y_DESCRIPTOR = 259
+Y_URL = 294
+
+SIZE_EYEBROW = 20
+SIZE_HERO = 64
+SIZE_DESCRIPTOR = 18
+SIZE_URL = 17
+
+EYEBROW = "RESEARCHER + BUILDER"
+HERO_LINES = ("Building AI systems for", "real-world complexity.")
+DESCRIPTOR = "DIGITAL TWINS  ·  APPLIED ML  ·  ONE HEALTH"
+
+# Tracking as em (Figma +200 ≈ 0.20em).
+TRACK_EYEBROW = 0.22
+TRACK_DESCRIPTOR = 0.05
+TRACK_URL = 0.02
+TRACK_HERO = 0.0
+
+# Hand-placed nodes in the right third (x 1250–1550). Three tributaries
+# (biological / environmental / agribusiness) feeding a lower-right confluence.
+NODES_1X: tuple[tuple[float, float], ...] = (
+    # Cluster A — high left
+    (1288, 62),
+    (1324, 84),
+    (1296, 112),
+    (1342, 98),
+    # Cluster B — high right
+    (1478, 52),
+    (1522, 70),
+    (1496, 98),
+    (1542, 108),
+    # Cluster C — mid-left branch
+    (1268, 198),
+    (1304, 224),
+    (1282, 258),
+    # Cluster D — lower-right confluence
+    (1418, 188),
+    (1464, 216),
+    (1402, 248),
+    (1456, 272),
+    (1510, 254),
+    (1484, 304),
+    (1534, 288),
+)
+
+EDGES: tuple[tuple[int, int], ...] = (
+    # Intra-cluster
+    (0, 1),
+    (1, 2),
+    (1, 3),
+    (0, 3),
+    (4, 5),
+    (5, 6),
+    (5, 7),
+    (6, 7),
+    (8, 9),
+    (9, 10),
+    (8, 10),
+    (11, 12),
+    (12, 13),
+    (13, 14),
+    (12, 14),
+    (14, 15),
+    (14, 16),
+    (15, 16),
+    # Tributaries into the confluence
+    (2, 11),
+    (3, 12),
+    (6, 11),
+    (7, 14),
+    (9, 13),
+    (10, 15),
+    (3, 6),
+    (8, 2),
+)
 
 
-def woff2_to_temp_path(url: str) -> str:
-    data = urlopen(url).read()
+def woff2_to_temp_path(css_url: str) -> str:
+    css = urlopen(Request(css_url, headers={"User-Agent": UA})).read().decode()
+    urls = re.findall(r"url\((https://fonts\.gstatic\.com/[^)]+\.woff2)\)", css)
+    if not urls:
+        raise RuntimeError(f"No woff2 URL found in {css_url}")
+    data = urlopen(urls[-1]).read()
     font = TTFont(BytesIO(data))
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".ttf")
     font.save(tmp.name)
     return tmp.name
-
-
-def tracked_line_width(font: ImageFont.FreeTypeFont, text: str, tracking_em: float) -> float:
-    if not text:
-        return 0.0
-    tracking_px = tracking_em * font.size
-    total = 0.0
-    for i, ch in enumerate(text):
-        total += font.getlength(ch)
-        if i < len(text) - 1:
-            total += tracking_px
-    return total
-
-
-def x_right_aligned(
-    font: ImageFont.FreeTypeFont,
-    text: str,
-    tracking_em: float,
-    canvas_w: float,
-    margin_right: float,
-) -> float:
-    """Left edge x so the tracked line ends margin_right px before canvas right."""
-    return canvas_w - margin_right - tracked_line_width(font, text, tracking_em)
 
 
 def draw_tracked_baseline(
@@ -107,8 +173,7 @@ def tracked_ink_bbox(
     cur_x = x
     boxes: list[tuple[float, float, float, float]] = []
     for i, ch in enumerate(text):
-        b = draw.textbbox((cur_x, baseline_y), ch, font=font, anchor="ls")
-        boxes.append(b)
+        boxes.append(draw.textbbox((cur_x, baseline_y), ch, font=font, anchor="ls"))
         cur_x += font.getlength(ch)
         if i < len(text) - 1:
             cur_x += tracking_px
@@ -138,203 +203,123 @@ def align_baseline_to_top(
     return baseline_y
 
 
-def align_baseline_to_bottom(
-    draw: ImageDraw.ImageDraw,
-    x: float,
-    text: str,
-    font: ImageFont.FreeTypeFont,
-    tracking_em: float,
-    want_bottom: float,
-) -> float:
-    baseline_y = want_bottom
-    for _ in range(12):
-        _l, _top, _r, bottom = tracked_ink_bbox(draw, x, baseline_y, text, font, tracking_em)
-        shift = want_bottom - bottom
-        baseline_y += shift
-        if abs(shift) < 0.25:
-            break
-    return baseline_y
+def quad_bezier(
+    p0: tuple[float, float],
+    p1: tuple[float, float],
+    p2: tuple[float, float],
+    n: int = 28,
+) -> list[tuple[float, float]]:
+    pts: list[tuple[float, float]] = []
+    for i in range(n + 1):
+        t = i / n
+        u = 1.0 - t
+        pts.append(
+            (
+                u * u * p0[0] + 2 * u * t * p1[0] + t * t * p2[0],
+                u * u * p0[1] + 2 * u * t * p1[1] + t * t * p2[1],
+            )
+        )
+    return pts
 
 
-def layout_baselines(
-    draw: ImageDraw.ImageDraw,
-    sw: float,
-    margin_right: float,
-    font_eyebrow: ImageFont.FreeTypeFont,
-    font_name: ImageFont.FreeTypeFont,
-    eyebrow: str,
-    name: str,
-    gap: float,
-    track_eye: float,
-    track_name: float,
-    y_top: float,
-) -> tuple[float, float, tuple[float, float, float, float], tuple[float, float, float, float]]:
-    """Return eyebrow/name baselines and ink bboxes for vertical centering."""
-    x_eye = x_right_aligned(font_eyebrow, eyebrow, track_eye, sw, margin_right)
-    baseline_eye = align_baseline_to_top(draw, x_eye, eyebrow, font_eyebrow, track_eye, y_top)
-    ink_eye = tracked_ink_bbox(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye)
-    want_name_top = ink_eye[3] + gap
+def draw_systems_network(base: Image.Image, scale: int) -> None:
+    """Sparse 4-cluster network, ~20–24% opacity, confined to the right third."""
+    overlay = Image.new("RGBA", base.size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
 
-    x_name = x_right_aligned(font_name, name, track_name, sw, margin_right)
-    baseline_name = align_baseline_to_top(draw, x_name, name, font_name, track_name, want_name_top)
-    ink_name = tracked_ink_bbox(draw, x_name, baseline_name, name, font_name, track_name)
-    return baseline_eye, baseline_name, ink_eye, ink_name
+    nodes = [(x * scale, y * scale) for x, y in NODES_1X]
+    line_alpha = 50  # ~20%
+    node_alpha = 61  # ~24%
+    stroke = max(1, round(0.9 * scale))
+    fill = (214, 220, 230, line_alpha)
+    node_fill = (222, 228, 236, node_alpha)
 
+    for i, (a, b) in enumerate(EDGES):
+        x0, y0 = nodes[a]
+        x1, y1 = nodes[b]
+        dx, dy = x1 - x0, y1 - y0
+        length = math.hypot(dx, dy) or 1.0
+        nx, ny = -dy / length, dx / length
+        # Longer bridges bow more so clusters read as feeding into one another.
+        bow_em = 0.16 + 0.18 * min(1.0, length / (220.0 * scale))
+        bow = length * bow_em * (-1 if i % 2 == 0 else 1)
+        ctrl = ((x0 + x1) / 2 + nx * bow, (y0 + y1) / 2 + ny * bow)
+        n_pts = 36 if length > 80 * scale else 24
+        draw.line(
+            quad_bezier((x0, y0), ctrl, (x1, y1), n=n_pts),
+            fill=fill,
+            width=stroke,
+            joint="curve",
+        )
 
-def pixel_right_edge(
-    img: Image.Image,
-    ink_bbox: tuple[float, float, float, float],
-    *,
-    pad: int = 2,
-    threshold: int = 200,
-) -> float | None:
-    """Rightmost bright pixel in a text band (post-rasterisation)."""
-    y0 = max(0, int(ink_bbox[1]) - pad)
-    y1 = min(img.height, int(ink_bbox[3]) + pad)
-    if y1 <= y0:
-        return None
-    band = np.asarray(img)[y0:y1]
-    if band.ndim == 3:
-        bright = band.max(axis=2) > threshold
-    else:
-        bright = band > threshold
-    cols = np.where(bright)
-    if not cols[0].size:
-        return None
-    return float(cols[1].max())
+    radii = (2.1, 1.7, 2.3, 1.85, 1.65, 2.25, 1.95, 2.05, 1.8, 2.4, 1.7, 2.2, 1.9, 2.15, 1.75, 2.35, 1.85, 2.0)
+    for (x, y), r in zip(nodes, radii):
+        rr = r * scale
+        draw.ellipse((x - rr, y - rr, x + rr, y + rr), fill=node_fill)
 
+    # Soften the graphic's left edge so it never competes with copy.
+    arr = np.asarray(overlay).copy()
+    xs = np.arange(arr.shape[1], dtype=np.float32)
+    x0 = 1220.0 * scale
+    x1 = 1310.0 * scale
+    fade = np.clip((xs - x0) / max(1.0, x1 - x0), 0.0, 1.0)
+    arr[:, :, 3] = (arr[:, :, 3].astype(np.float32) * fade[np.newaxis, :]).astype(np.uint8)
+    overlay = Image.fromarray(arr, "RGBA")
 
-def render_banner_block(
-    sw: float,
-    sh: float,
-    margin_right: float,
-    font_eyebrow: ImageFont.FreeTypeFont,
-    font_name: ImageFont.FreeTypeFont,
-    font_url: ImageFont.FreeTypeFont,
-    eyebrow: str,
-    name: str,
-    gap: float,
-    track_eye: float,
-    track_name: float,
-    track_url: float,
-    *,
-    shift_x_name: float = 0.0,
-) -> tuple[
-    Image.Image,
-    tuple[float, float, float, float],
-    tuple[float, float, float, float],
-]:
-    """Draw eyebrow/name block (right-aligned) and bottom-right URL."""
-    img = site_body_background((int(sw), int(sh)))
-    draw = ImageDraw.Draw(img)
-
-    baseline_eye, baseline_name, ink_eye, ink_name = layout_baselines(
-        draw,
-        sw,
-        margin_right,
-        font_eyebrow,
-        font_name,
-        eyebrow,
-        name,
-        gap,
-        track_eye,
-        track_name,
-        y_top=0.0,
-    )
-    block_h = ink_name[3] - ink_eye[1]
-    v_shift = (sh - block_h) / 2 - ink_eye[1]
-    baseline_eye += v_shift
-    baseline_name += v_shift
-
-    x_eye = x_right_aligned(font_eyebrow, eyebrow, track_eye, sw, margin_right)
-    x_name = x_right_aligned(font_name, name, track_name, sw, margin_right) + shift_x_name
-    x_url = x_right_aligned(font_url, SITE_URL, track_url, sw, URL_MARGIN_RIGHT * SCALE)
-    baseline_url = align_baseline_to_bottom(
-        draw,
-        x_url,
-        SITE_URL,
-        font_url,
-        track_url,
-        sh - URL_MARGIN_BOTTOM * SCALE,
-    )
-
-    draw_tracked_baseline(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye, FG)
-    draw_tracked_baseline(draw, x_name, baseline_name, name, font_name, track_name, FG)
-    draw_tracked_baseline(draw, x_url, baseline_url, SITE_URL, font_url, track_url, FG_URL)
-
-    ink_eye = tracked_ink_bbox(draw, x_eye, baseline_eye, eyebrow, font_eyebrow, track_eye)
-    ink_name = tracked_ink_bbox(draw, x_name, baseline_name, name, font_name, track_name)
-    return img, ink_eye, ink_name
+    composited = Image.alpha_composite(base.convert("RGBA"), overlay).convert("RGB")
+    base.paste(composited)
 
 
 def main() -> None:
-    plex_600 = woff2_to_temp_path(WOFF2_IBM_PLEX_600)
-    plex_400 = woff2_to_temp_path(WOFF2_IBM_PLEX_400)
-    sg_path = woff2_to_temp_path(WOFF2_SPACE_GROTESK_700)
+    paths = {wght: woff2_to_temp_path(url) for wght, url in INTER_CSS.items()}
     try:
-        # All pixel measurements scaled up; canvas downscaled at the end for crisp output.
         sw, sh = W * SCALE, H * SCALE
-        margin_right = MARGIN_RIGHT * SCALE
+        img = Image.new("RGB", (sw, sh), BG_PAGE)
+        draw_systems_network(img, SCALE)
+        draw = ImageDraw.Draw(img)
 
-        eyebrow_size = 20 * SCALE
-        name_size = 86 * SCALE
-        url_size = 24 * SCALE
-        font_eyebrow = ImageFont.truetype(plex_600, eyebrow_size)
-        font_name = ImageFont.truetype(sg_path, name_size)
-        font_url = ImageFont.truetype(plex_400, url_size)
+        font_eyebrow = ImageFont.truetype(paths[500], SIZE_EYEBROW * SCALE)
+        font_hero = ImageFont.truetype(paths[600], SIZE_HERO * SCALE)
+        font_descriptor = ImageFont.truetype(paths[500], SIZE_DESCRIPTOR * SCALE)
+        font_url = ImageFont.truetype(paths[400], SIZE_URL * SCALE)
 
-        eyebrow = "RESEARCHER + BUILDER"
-        name = DISPLAY_NAME
-        gap = 22 * SCALE
+        x_copy = X_COPY * SCALE
+        x_lower = X_LOWER * SCALE
 
-        track_eye = 0.16
-        track_name = -0.06
-        track_url = 0.05
-
-        img, ink_eye, ink_name = render_banner_block(
-            sw,
-            sh,
-            margin_right,
-            font_eyebrow,
-            font_name,
-            font_url,
-            eyebrow,
-            name,
-            gap,
-            track_eye,
-            track_name,
-            track_url,
+        b_eye = align_baseline_to_top(
+            draw, x_copy, EYEBROW, font_eyebrow, TRACK_EYEBROW, Y_EYEBROW * SCALE
         )
-        pr_eye = pixel_right_edge(img, ink_eye)
-        pr_name = pixel_right_edge(img, ink_name)
-        if pr_eye is not None and pr_name is not None:
-            dx = pr_eye - pr_name
-            if abs(dx) >= 2:
-                img, _, _ = render_banner_block(
-                    sw,
-                    sh,
-                    margin_right,
-                    font_eyebrow,
-                    font_name,
-                    font_url,
-                    eyebrow,
-                    name,
-                    gap,
-                    track_eye,
-                    track_name,
-                    track_url,
-                    shift_x_name=dx,
-                )
+        draw_tracked_baseline(draw, x_copy, b_eye, EYEBROW, font_eyebrow, TRACK_EYEBROW, FG_EYEBROW)
+
+        hero_lh = SIZE_HERO * 0.97 * SCALE
+        for i, line in enumerate(HERO_LINES):
+            want_top = Y_HERO * SCALE + i * hero_lh
+            b = align_baseline_to_top(draw, x_copy, line, font_hero, TRACK_HERO, want_top)
+            draw_tracked_baseline(draw, x_copy, b, line, font_hero, TRACK_HERO, FG)
+
+        b_desc = align_baseline_to_top(
+            draw, x_lower, DESCRIPTOR, font_descriptor, TRACK_DESCRIPTOR, Y_DESCRIPTOR * SCALE
+        )
+        draw_tracked_baseline(
+            draw, x_lower, b_desc, DESCRIPTOR, font_descriptor, TRACK_DESCRIPTOR, FG_DESCRIPTOR
+        )
+
+        b_url = align_baseline_to_top(
+            draw, x_lower, SITE_URL, font_url, TRACK_URL, Y_URL * SCALE
+        )
+        draw_tracked_baseline(draw, x_lower, b_url, SITE_URL, font_url, TRACK_URL, FG_URL)
 
         img = img.resize((W, H), Image.LANCZOS)
-
+        # LANCZOS can undershoot around faint light-on-dark strokes; clip so the
+        # field stays a uniform near-black instead of a darker right-hand smear.
+        arr = np.maximum(np.asarray(img), np.array(BG_PAGE, dtype=np.uint8))
+        img = Image.fromarray(arr, "RGB")
         OUT.parent.mkdir(parents=True, exist_ok=True)
         img.save(OUT, format="PNG", optimize=True)
         print(f"Wrote {OUT} ({OUT.stat().st_size} bytes)")
     finally:
-        os.unlink(plex_600)
-        os.unlink(plex_400)
-        os.unlink(sg_path)
+        for p in paths.values():
+            os.unlink(p)
 
 
 if __name__ == "__main__":
