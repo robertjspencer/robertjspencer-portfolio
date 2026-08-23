@@ -650,10 +650,15 @@ h6,
 	transform: translateX(4px);
 }
 
-.focus-grid,
-.proof-grid {
+.focus-grid {
 	display: grid;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 1.2rem;
+}
+
+.proof-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
 	gap: 1.2rem;
 }
 

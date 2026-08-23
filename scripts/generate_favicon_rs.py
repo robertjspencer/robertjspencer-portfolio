@@ -70,7 +70,7 @@ def main() -> None:
     inner = ICON - (2 * PAD)
     scale = inner / max(max_x - min_x, max_y - min_y)
 
-    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {ICON:.0f} {ICON:.0f}" role="img" aria-label="Robert J. Spencer">
+    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {ICON:.0f} {ICON:.0f}" role="img" aria-label="Robert Spencer">
   <defs>
     <radialGradient id="bg-glow" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="{_GLOW_RADIUS:.4f}">
       <stop offset="0%" stop-color="#ffffff" stop-opacity="{GLOW_ALPHA}"/>
