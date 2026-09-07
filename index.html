@@ -80,18 +80,18 @@
 		<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
 		<link rel="shortcut icon" href="images/favicon.svg" />
 		<link rel="stylesheet" href="assets/css/main.css" />
-		<link rel="stylesheet" href="assets/css/custom.css" />
+		<link rel="stylesheet" href="assets/css/custom.css?v=20260906-layout2" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
-	<body class="is-preload">
+	<body class="is-preload"><a class="skip-link" href="#main">Skip to content</a>
 		<div id="wrapper">
 			<header id="header" class="alt">
 				<div class="hero-shell">
-					<div class="hero-copy">
+					<div class="hero-copy"><span id="about" class="anchor-alias"></span><span id="focus" class="anchor-alias"></span>
 						<p class="eyebrow">Researcher + Builder</p>
 						<h1>Robert Spencer.</h1>
 						<p class="hero-lead">I build AI systems for complex, real-world problems—from data pipelines and model development to the software people use.</p>
-						<p class="hero-summary">AI Engineer at Beyond Data and PhD researcher in AI for epidemiology at The University of Queensland. My research with SAAFE CRC focuses on privacy-preserving digital twins for antimicrobial resistance (AMR) risk assessment across One Health.</p>
+						<p class="hero-summary">AI Engineer at Beyond Data &amp; PhD researcher at The University of Queensland.</p><p class="hero-specialisms">Applied machine learning · Digital twins · One Health</p>
 						<ul class="hero-actions">
 							<li><a href="#proof" class="button primary">See Selected Work</a></li>
 							<li><a href="documents/2026-08-17%20Robert%20Spencer_CV.pdf" target="_blank" class="button">Download CV</a></li>
@@ -109,8 +109,8 @@
 				</div>
 			</header>
 
-			<nav id="nav">
-				<div class="nav-shell">
+			<nav id="nav" aria-label="Main navigation">
+				<div class="nav-shell"><span class="nav-name" aria-hidden="true">Robert Spencer</span>
 					<button
 						id="nav-toggle"
 						class="nav-toggle"
@@ -121,14 +121,10 @@
 						Menu
 					</button>
 					<ul id="nav-links" class="nav-links">
-						<li><a href="#about" class="active">Overview</a></li>
-						<li><a href="#focus">Focus</a></li>
-						<li><a href="#proof">Work</a></li>
-						<li><a href="#journey">Journey</a></li>
-						<li><a href="#content">Online</a></li>
-						<li><a href="#contact">Connect</a></li>
-					</ul>
-					<button
+    <li><a href="#proof" class="active">Selected work</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li><li class="theme-menu-item"><button
 						id="theme-toggle"
 						class="theme-toggle"
 						type="button"
@@ -136,7 +132,9 @@
 					>
 						<span class="theme-toggle-dot" aria-hidden="true"></span>
 						<span class="theme-toggle-label">Dark mode</span>
-					</button>
+					</button></li>
+</ul>
+
 					<script>
 						(function () {
 							var theme = document.documentElement.getAttribute('data-theme') || 'light';
@@ -156,102 +154,26 @@
 				</div>
 			</nav>
 
-			<div id="main">
-				<section id="about" class="main custom-section section-overview">
-					<div class="section-heading">
-						<p class="eyebrow">Overview</p>
-						<h2>Working at the intersection of research, software, and decision-making</h2>
-					</div>
-					<div class="overview-grid">
-						<div class="overview-copy">
-							<p>My work combines machine learning, software engineering and applied research. At Beyond Data, I deliver end-to-end data and AI solutions, from requirements and architecture through to deployment.</p>
-							<p>Alongside industry work, I develop digital twins for AMR risk assessment and apply clinical language models to veterinary patient records at UQ. My background in health and analytics shapes how I approach problems across industry, health and the environment.</p>
-						</div>
-						<div class="overview-panel">
-							<h3>At a glance</h3>
-							<ul class="fact-list">
-								<li>
-									<span class="fact-label">Now</span>
-									<span class="fact-value">AI Engineer at Beyond Data + PhD at UQ</span>
-								</li>
-								<li>
-									<span class="fact-label">Research</span>
-									<span class="fact-value">Digital twins, One Health, AMR risk</span>
-								</li>
-								<li>
-									<span class="fact-label">Builds</span>
-									<span class="fact-value">ML pipelines, optimisation tools, data products</span>
-								</li>
-								<li>
-									<span class="fact-label">Strength</span>
-									<span class="fact-value">Turning ambiguous problems into shipped systems</span>
-								</li>
-								<li>
-									<span class="fact-label">Location</span>
-									<span class="fact-value">Brisbane, with NZ and Australian experience</span>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<div class="metric-band">
-						<a class="metric-card" href="#proof-building-energy">
-							<strong>15.9%</strong>
-							<span class="metric-card-desc">average reduction in forecast error against single-source baselines</span>
-							<span class="metric-card-cta">See proof</span>
-						</a>
-						<a class="metric-card" href="#proof-nutrition">
-							<strong>90%+</strong>
-							<span class="metric-card-desc">reduction in nutrition formulation iteration time</span>
-							<span class="metric-card-cta">See proof</span>
-						</a>
-						<a class="metric-card" href="#proof-nutrition">
-							<strong>25%+</strong>
-							<span class="metric-card-desc">lower formulation costs through AI-optimised product modelling</span>
-							<span class="metric-card-cta">See proof</span>
-						</a>
-						<a class="metric-card" href="#proof-nutrition">
-							<strong>150+</strong>
-							<span class="metric-card-desc">health claims supported through structured data substantiation</span>
-							<span class="metric-card-cta">See proof</span>
-						</a>
-					</div>
-				</section>
-
-				<section id="focus" class="main custom-section section-focus">
-					<div class="section-heading">
-						<p class="eyebrow">Focus Areas</p>
-						<h2>Three areas where I do my best work</h2>
-					</div>
-					<div class="focus-grid">
-						<article class="focus-card">
-							<p class="card-index">01</p>
-							<h3>Applied machine learning</h3>
-							<p>I develop forecasting, transfer learning and natural language processing approaches, with an emphasis on reliable evaluation and practical use.</p>
-						</article>
-						<article class="focus-card">
-							<p class="card-index">02</p>
-							<h3>Digital twins for complex systems</h3>
-							<p>I develop approaches to model interconnected human, animal and environmental health systems without centralising sensitive records. My research combines machine learning, synthetic data generation and simulation.</p>
-						</article>
-						<article class="focus-card">
-							<p class="card-index">03</p>
-							<h3>Data products for everyday decisions</h3>
-							<p>I build dashboards, internal tools, pipelines and decision-support systems that help teams put data and models to work in their daily workflows.</p>
-						</article>
-					</div>
-				</section>
-
-				<section id="proof" class="main custom-section section-proof">
-					<div class="section-heading">
-						<p class="eyebrow">Selected Work</p>
-						<h2>Work that shows how I think and what I ship</h2>
-					</div>
-					<div class="proof-grid">
-						<article class="proof-card featured-proof" id="proof-building-energy">
-							<p class="proof-type">Research</p>
-							<h3>Transformer transfer learning for building energy forecasting</h3>
-							<p>My first-author paper in <em>Energy and Buildings</em> (Q1 journal, 2025) compared PatchTST, vanilla Transformer and Informer across 16 building datasets. Combining multiple source datasets in a zero-shot setup reduced mean absolute error by an average of 15.9% for 24-hour forecasts, compared with single-source baselines using the vanilla Transformer.</p>
-							<figure class="publication-figure">
+<main id="main" tabindex="-1">
+<section id="results" class="main results-section" aria-labelledby="results-heading">
+    <h2 id="results-heading" class="eyebrow">Selected results</h2>
+    <div class="metric-band">
+        <a class="metric-card" href="#proof-building-energy"><strong>15.9%</strong><span>lower forecasting error</span><small>Average MAE reduction vs single-source baselines</small></a>
+        <a class="metric-card" href="#proof-nutrition"><strong>90%+</strong><span>less formulation time</span><small>From weeks to days</small></a>
+        <a class="metric-card" href="#proof-nutrition"><strong>25%+</strong><span>lower formulation costs</span><small>AI-optimised product formulations</small></a>
+        <a class="metric-card" href="#proof-nutrition"><strong>150+</strong><span>health claims supported</span><small>Structured evidence substantiation</small></a>
+    </div>
+</section><section id="proof" class="main custom-section"><div class="section-heading"><h2>Selected work</h2></div><div class="proof-grid">
+    <article id="proof-building-energy" class="proof-card">
+        <p class="eyebrow">Research · First-author publication</p>
+        <h3>Forecasting energy use across buildings</h3>
+        <p class="project-result">15.9% lower mean absolute error</p>
+        <p>New buildings often lack enough data to train reliable forecasting models. I investigated how transformer models can learn from other buildings.</p>
+        <p>Combining multiple source datasets reduced error by an average of 15.9% for 24-hour forecasts, compared with single-source baselines using the vanilla Transformer.</p>
+        <a href="https://doi.org/10.1016/j.enbuild.2025.115632" target="_blank" rel="noopener noreferrer" class="button primary">Read publication <span class="sr-only">(opens in a new tab)</span></a>
+        <details class="project-details"><summary>Methods and citation</summary>
+            <p>Compared PatchTST, vanilla Transformer and Informer across 16 building datasets from the Building Data Genome Project 2. Evaluated zero-shot and fine-tuning approaches; the 15.9% result uses a multi-source zero-shot setup.</p>
+            <p>Published in <em>Energy and Buildings</em> (Q1 journal, 2025).</p><figure class="publication-figure">
 								<img
 									class="photo-zoomable"
 									src="images/spencer-et-al-2025-energy-buildings-first-page.png"
@@ -263,31 +185,17 @@
 								/>
 								<figcaption>Spencer et al. (2025). Transfer learning on transformers for building energy consumption forecasting—A comparative study. <em>Energy and Buildings</em>, 336, 115632.</figcaption>
 							</figure>
-							<ul class="proof-tags">
-								<li>PatchTST</li>
-								<li>Transfer learning</li>
-								<li>Time series</li>
-								<li>Publication</li>
-							</ul>
-							<a href="https://doi.org/10.1016/j.enbuild.2025.115632" target="_blank" class="button primary">Read Publication</a>
-						</article>
-						<article class="proof-card" id="proof-nutrition">
-							<p class="proof-type">Industry</p>
-							<h3>AI systems for nutrition formulation and substantiation</h3>
-							<p>At Radix Nutrition, I led the design and deployment of AI systems across R&amp;D and Operations, combining product ownership with hands-on machine learning and software engineering.</p>
-							<ul>
-								<li>Built nutrition optimisation systems that reduced formulation iteration time by over 90%, from weeks to days.</li>
-								<li>Co-developed a product range using AI-optimised formulations, reducing formulation costs by over 25%.</li>
-								<li>Led evidence substantiation for over 150 general-level health claims for a single product line using the FSANZ framework.</li>
-								<li>Developed dashboards, user interfaces and automation tools adopted across R&amp;D and Operations.</li>
-							</ul>
-							<p>Formulation modelling integrated major food composition databases, regulatory requirements, and nutrition rating and nutrient profiling systems.</p>
-							<ul class="proof-tags">
-								<li>Optimisation</li>
-								<li>Internal tools</li>
-								<li>Decision support</li>
-							</ul>
-							<ul class="proof-links">
+        </details>
+    </article>
+    <article id="proof-nutrition" class="proof-card">
+        <p class="eyebrow">Industry · Radix Nutrition</p>
+        <h3>AI for nutrition formulation</h3>
+        <p class="project-result">From weeks to days</p>
+        <p>I led the design and deployment of AI systems for nutrition optimisation, combining product ownership with hands-on machine learning and software engineering.</p>
+        <ul class="outcome-list"><li>Reduced formulation iteration time by over 90%.</li><li>Co-developed AI-optimised formulations that reduced formulation costs by over 25%.</li><li>Led evidence substantiation for over 150 general-level health claims for a single product line.</li></ul>
+        <details class="project-details"><summary>Approach and media coverage</summary>
+            <p>Integrated major food composition databases and regulatory requirements, using the FSANZ framework for claims substantiation. Modelled formulations against nutrition rating and nutrient profiling systems.</p>
+            <p>Built dashboards, user interfaces and automation adopted across R&amp;D and Operations.</p><ul class="proof-links">
 								<li>
 									<a href="https://www.rnz.co.nz/national/programmes/ninetonoon/audio/2018996469/waikato-food-tech-company-putting-science-into-breakfast" target="_blank" rel="noopener noreferrer">RNZ (audio, 2025)</a>
 								</li>
@@ -298,255 +206,46 @@
 									<a href="https://www.nutraingredients.com/Article/2025/12/15/nz-firm-develops-software-platform-for-food-nutrition-innovation/" target="_blank" rel="noopener noreferrer">NutraIngredients (2025)</a>
 								</li>
 							</ul>
-						</article>
-					</div>
-				</section>
-
-				<section id="journey" class="main custom-section section-journey">
-					<div class="section-heading">
-						<p class="eyebrow">Journey</p>
-						<h2>A non-linear path that sharpened how I work</h2>
-					</div>
-					<div class="journey-wrap">
-						<div class="journey-intro">
-							<p>
-								I did not begin in computer science. A background in health, sport,
-								and human performance oriented me toward problems with tangible
-								consequences, noisy data, and cross-disciplinary stakeholders.
-							</p>
-							<p>
-								That perspective still shapes my work today. I am most energised when a
-								project needs both technical depth and translation across disciplines.
-							</p>
-						</div>
-						<div class="journey-interleaved-main">
-							<article class="timeline-item">
-								<span class="timeline-year">2026-Present</span>
-								<div>
-									<h3>AI Engineer, Beyond Data</h3>
-									<p>
+        </details>
+    </article>
+</div></section><section id="experience" class="main custom-section"><div class="section-heading"><h2>Experience</h2></div><span id="journey" class="anchor-alias"></span><div class="resume-list"><article class="resume-entry">
+        <div class="entry-heading"><img class="entry-logo" src="images/beyond-data-logo.png" alt="" loading="lazy" /><div><h3>AI Engineer</h3><p class="entry-org">Beyond Data · Contract</p></div><p class="entry-date">Jun 2026–Present</p></div>
+        <div class="entry-body"><p>
 										Contract role alongside the PhD, working across the full delivery
 										lifecycle — from requirements and solution architecture through
 										data engineering, ML development, and deployment.
-									</p>
-								</div>
-							</article>
-							<div class="journey-media-cell">
-								<figure class="journey-figure journey-figure--institution">
-									<div class="journey-logo-frame journey-logo-frame--single">
-										<img
-											src="images/beyond-data-logo.png"
-											alt="Beyond Data — Intelligent Operating Systems"
-											class="journey-logo-img journey-logo-img--uq-wide"
-											loading="lazy"
-											decoding="async"
-										/>
-									</div>
-									<figcaption>Beyond Data — AI Engineer (2026-Present)</figcaption>
-								</figure>
-							</div>
-							<article class="timeline-item">
-								<span class="timeline-year">2026-Present</span>
-								<div>
-									<h3>Research Assistant (Health Data Science), The University of Queensland</h3>
-									<p>Since June 2026, applying clinical language models to large-scale veterinary electronic patient records as part of a natural language processing research project within the School of Veterinary Science.</p>
-									<p>Tools: Python, Hugging Face Transformers and spaCy.</p>
-								</div>
-							</article>
-							<div class="journey-media-cell">
-								<figure class="journey-figure journey-figure--institution">
-									<div class="journey-logo-frame journey-logo-frame--single">
-										<img src="images/uq-news.jpg" alt="The University of Queensland" class="journey-logo-img journey-logo-img--uq-wide" loading="lazy" decoding="async" />
-									</div>
-									<figcaption>School of Veterinary Science — Health Data Science</figcaption>
-								</figure>
-							</div>
-							<article class="timeline-item">
-								<span class="timeline-year">2026-2029</span>
-								<div>
-									<h3>PhD in AI for Epidemiology, The University of Queensland</h3>
-									<p>Developing privacy-preserving digital twins for antimicrobial resistance risk assessment across human, animal and environmental health with SAAFE CRC. Research combines scalable machine learning, synthetic data generation and simulation using UQ’s Bunya high-performance computing infrastructure.</p>
-									<p>Supported by a fully funded Research Training Program (RTP) Scholarship and SAAFE CRC Top-Up Scholarship. April 2026–September 2029 (expected).</p>
-								</div>
-							</article>
-							<div class="journey-media-cell">
-								<figure class="journey-figure journey-figure--institution">
-									<div class="journey-logo-stack" role="group" aria-label="PhD affiliation logos">
-										<div class="journey-logo-frame">
-											<img
-												src="images/uq-news.jpg"
-												alt="The University of Queensland"
-												class="journey-logo-img journey-logo-img--uq-wide"
-												loading="lazy"
-												decoding="async"
-											/>
-										</div>
-										<div class="journey-logo-frame">
-											<img
-												src="images/saafe-crc-logo.jpg"
-												alt="SAAFE CRC — Solving Antimicrobial Resistance in Agribusiness, Food &amp; Environments"
-												class="journey-logo-img journey-logo-img--saafe"
-												loading="lazy"
-												decoding="async"
-											/>
-										</div>
-									</div>
-									<figcaption>PhD — The University of Queensland &amp; SAAFE CRC</figcaption>
-								</figure>
-							</div>
-							<article class="timeline-item">
-								<span class="timeline-year">2024-2025</span>
-								<div>
-									<h3>Radix Nutrition — Data Scientist, then Senior Data Scientist</h3>
-									<p>Joined as the first technical hire (Data Scientist, Apr 2024–Jan 2025), building data infrastructure and internal tools; promoted to Senior Data Scientist (Jan–Oct 2025), owning end-to-end AI and analytics for formulation, substantiation, and decision support.</p>
-								</div>
-							</article>
-							<div class="journey-media-cell">
-								<figure class="journey-figure">
-									<div class="journey-image-frame journey-image-frame--contain">
-										<img
-											src="images/radix-nutrition-2025.jpg"
-											alt="Portrait of Robert Spencer in a Radix Nutrition shirt"
-											class="journey-image photo-zoomable"
-											width="1254"
-											height="1254"
-											loading="lazy"
-											decoding="async"
-										/>
-									</div>
-									<figcaption>Radix Nutrition — Data Scientist, then Senior Data Scientist (Apr 2024–Oct 2025)</figcaption>
-								</figure>
-							</div>
-							<article class="timeline-item">
-								<span class="timeline-year">2024-2027</span>
-								<div>
-									<h3>Master of Computer Science in Artificial Intelligence, Monash University</h3>
-									<p>Specialising in artificial intelligence, with a High Distinction average (GPA: 3.83/4.0). Completed 9 of 12 units before commencing my PhD; completing the remaining coursework alongside doctoral research. Expected completion: December 2027.</p>
-								</div>
-							</article>
-							<div class="journey-media-cell">
-								<figure class="journey-figure journey-figure--institution">
-									<div class="journey-logo-frame journey-logo-frame--single">
-										<img
-											src="images/monash-logo.jpg"
-											alt="Monash University"
-											class="journey-logo-img"
-											loading="lazy"
-											decoding="async"
-										/>
-									</div>
-									<figcaption>Monash University — Master of Computer Science in Artificial Intelligence</figcaption>
-								</figure>
-							</div>
-							<article class="timeline-item">
-								<span class="timeline-year">2023-2024</span>
-								<div>
-									<h3>Research Assistant in AI for Energy Forecasting, Massey University</h3>
-									<p>Researched transfer learning for building energy forecasting from September 2023 to October 2024. Compared transformer architectures and evaluated zero-shot and fine-tuning approaches for transferring models between buildings, resulting in a <a href="#proof-building-energy">first-author publication in <em>Energy and Buildings</em> (2025)</a>.</p>
-								</div>
-							</article>
-							<div class="journey-media-cell">
-								<figure class="journey-figure">
-									<div class="journey-image-frame">
-										<img
-											src="images/2025-02-21-massey-manalyt-supervisors.jpg"
-											alt="Group photo: Dr Mikael Boulic, Dr Hennie van Heerden, Robert Spencer, Dr Surangika Ranathunga, and A/Prof Teo Susnjak outside the School of Built Environment Laboratories at Massey University"
-											class="journey-image photo-zoomable"
-											loading="lazy"
-											decoding="async"
-										/>
-									</div>
-									<figcaption>Massey research team — Dr Mikael Boulic, Dr Hennie van Heerden, Robert Spencer, Dr Surangika Ranathunga, A/Prof Teo Susnjak (left to right) — Master of Analytics in Health, School of Built Environment Laboratories, Massey University, February 2025</figcaption>
-								</figure>
-							</div>
-							<article class="timeline-item">
-								<span class="timeline-year">2023-2024</span>
-								<div>
-									<h3>Master of Analytics in Health, Massey University</h3>
-									<p>Awarded with Distinction (GPA: 8.17/9.0), specialising in Health. Awarded a Massey University Research Fund (MURF) Seed Grant to develop machine learning approaches for occupant comfort and energy performance in commercial buildings. Research led to a first-author publication in <em>Energy and Buildings</em> (Q1 journal, 2025).</p>
-								</div>
-							</article>
-							<div class="journey-media-cell">
-								<figure class="journey-figure">
-									<div class="journey-image-frame">
-										<img
-											src="images/2024-massey-graduation.jpeg"
-											alt="Robert Spencer at Massey University graduation"
-											class="journey-image photo-zoomable"
-										/>
-									</div>
-									<figcaption>Master of Analytics in Health — Massey University, 2024</figcaption>
-								</figure>
-							</div>
-							<article class="timeline-item">
-								<span class="timeline-year">2020-2022</span>
-								<div>
-									<h3>Bachelor of Health, Sport &amp; Human Performance, The University of Waikato</h3>
-									<p>Double majors in Human Performance Science and Community Health — a grounding in health data, stakeholder context, and cross-disciplinary thinking that still informs my technical work.</p>
-								</div>
-							</article>
-							<div class="journey-media-cell">
-								<figure class="journey-figure">
-									<div class="journey-image-frame">
-										<img
-											src="images/2023-waikato-graduation.jpeg"
-											alt="Robert Spencer at The University of Waikato graduation"
-											class="journey-image photo-zoomable"
-										/>
-									</div>
-									<figcaption>Bachelor of Health, Sport &amp; Human Performance — double majors in Human Performance Science and Community Health — The University of Waikato, 2022</figcaption>
-								</figure>
-							</div>
-						</div>
-					</div>
-				</section>
-
-				<section id="content" class="main custom-section section-content">
-					<div class="section-heading">
-						<p class="eyebrow">Online Presence</p>
-						<h2>I share the process as well as the outcomes</h2>
-					</div>
-					<div class="content-grid">
-						<div class="content-copy">
-							<p>
-								On YouTube and online, I talk about career transitions into AI, the
-								tools and models I use day to day, and the practical side of building
-								technical capability over time.
-							</p>
-							<p>
-								The throughline matches my research and engineering work:
-								curiosity, usefulness, and making technical ideas accessible.
-							</p>
-						</div>
-						<div class="content-panel">
-							<h3>Where to follow my work</h3>
-							<ul class="link-list">
-								<li><a href="https://www.youtube.com/@robertspencer406" target="_blank">YouTube</a></li>
-								<li><a href="https://github.com/robertjspencer" target="_blank">GitHub</a></li>
-								<li><a href="https://www.linkedin.com/in/rspencer9721/" target="_blank">LinkedIn</a></li>
-								<li><a href="https://orcid.org/0009-0005-2321-6212" target="_blank">ORCID</a></li>
-							</ul>
-						</div>
-					</div>
-				</section>
-
-				<section id="contact" class="main custom-section section-contact">
-					<div class="section-heading center">
-						<p class="eyebrow">Connect</p>
-						<h2>Interested in research, collaboration, or applied AI work?</h2>
-						<p>
-							I'm always happy to connect with people working in artificial intelligence,
-							health, complex systems, sustainability, and thoughtful technical
-							communication.
-						</p>
-					</div>
-					<div class="contact-actions">
-						<a href="mailto:rspencer9721@gmail.com" class="button primary">Email Me</a>
-						<a href="documents/2026-08-17%20Robert%20Spencer_CV.pdf" target="_blank" class="button">Download CV</a>
-						<a href="https://www.linkedin.com/in/rspencer9721/" target="_blank" class="button">LinkedIn</a>
-					</div>
-				</section>
-			</div>
+									</p></div>
+    </article><article class="resume-entry">
+        <div class="entry-heading"><img class="entry-logo" src="images/uq-news.jpg" alt="" loading="lazy" /><div><h3>Research Assistant · Health Data Science</h3><p class="entry-org">The University of Queensland · Contract</p></div><p class="entry-date">Jun 2026–Present</p></div>
+        <div class="entry-body"><p>Applying clinical language models to large-scale veterinary electronic patient records as part of a natural language processing research project within the School of Veterinary Science.</p>
+<p>Tools: Python, Hugging Face Transformers and spaCy.</p></div>
+    </article><article class="resume-entry">
+        <div class="entry-heading"><img class="entry-logo" src="images/uq-news.jpg" alt="" loading="lazy" /><div><h3>PhD Researcher · AI for Epidemiology</h3><p class="entry-org">The University of Queensland · SAAFE CRC</p></div><p class="entry-date">Apr 2026–Present</p></div>
+        <div class="entry-body"><p>Developing privacy-preserving digital twins for antimicrobial resistance risk assessment across human, animal and environmental health with SAAFE CRC. Research combines scalable machine learning, synthetic data generation and simulation using UQ’s Bunya high-performance computing infrastructure.</p></div>
+    </article><article class="resume-entry">
+        <div class="entry-heading"><div><h3>Data Scientist → Senior Data Scientist</h3><p class="entry-org">Radix Nutrition</p></div><p class="entry-date">Apr 2024–Oct 2025</p></div>
+        <div class="entry-body"><p>Joined as the first technical hire and established the data pipelines, development environment and initial machine learning systems. Promoted from Data Scientist to Senior Data Scientist in January 2025, leading AI delivery across R&amp;D and Operations.</p><p><a href="#proof-nutrition">See the nutrition optimisation work →</a></p></div>
+    </article><article class="resume-entry">
+        <div class="entry-heading"><div><h3>Research Assistant · AI for Energy Forecasting</h3><p class="entry-org">Massey University · Contract</p></div><p class="entry-date">Sep 2023–Oct 2024</p></div>
+        <div class="entry-body"><p>Researched transfer learning for building energy forecasting from September 2023 to October 2024. Compared transformer architectures and evaluated zero-shot and fine-tuning approaches for transferring models between buildings, resulting in a <a href="#proof-building-energy">first-author publication in <em>Energy and Buildings</em> (2025)</a>.</p></div>
+    </article></div></section><section id="education" class="main custom-section"><div class="section-heading"><h2>Education</h2><p>My background in health and human performance led me into analytics, software engineering and AI research.</p></div><div class="resume-list"><article class="resume-entry">
+        <div class="entry-heading"><img class="entry-logo" src="images/uq-news.jpg" alt="" loading="lazy" /><div><h3>Doctor of Philosophy · AI for Epidemiology</h3><p class="entry-org">The University of Queensland</p></div><p class="entry-date">2026–2029 · Expected</p></div>
+        <div class="entry-body"><p>Research: SAAFE CRC Digital Twins for Antimicrobial Resistance Risk Assessment Modelling.</p><p>Fully funded Research Training Program (RTP) Scholarship and SAAFE CRC Top-Up Scholarship. Expected completion: September 2029.</p></div>
+    </article><article class="resume-entry">
+        <div class="entry-heading"><img class="entry-logo" src="images/monash-logo.jpg" alt="" loading="lazy" /><div><h3>Master of Computer Science · Artificial Intelligence</h3><p class="entry-org">Monash University</p></div><p class="entry-date">2024–2027 · Expected</p></div>
+        <div class="entry-body"><p>Specialising in artificial intelligence, with a High Distinction average (GPA: 3.83/4.0). Completed 9 of 12 units before commencing my PhD; completing the remaining coursework alongside doctoral research. Expected completion: December 2027.</p></div>
+    </article><article class="resume-entry">
+        <div class="entry-heading"><div><h3>Master of Analytics · Health</h3><p class="entry-org">Massey University</p></div><p class="entry-date">2023–2024</p></div>
+        <div class="entry-body"><p>Awarded with Distinction (GPA: 8.17/9.0), specialising in Health. Awarded a Massey University Research Fund (MURF) Seed Grant to develop machine learning approaches for occupant comfort and energy performance in commercial buildings. Research led to a first-author publication in <em>Energy and Buildings</em> (Q1 journal, 2025).</p></div>
+    </article><article class="resume-entry">
+        <div class="entry-heading"><div><h3>Bachelor of Health, Sport &amp; Human Performance</h3><p class="entry-org">The University of Waikato</p></div><p class="entry-date">2020–2022</p></div>
+        <div class="entry-body"><p>Double majors in Human Performance Science and Community Health — a grounding in health data, stakeholder context, and cross-disciplinary thinking that still informs my technical work.</p></div>
+    </article></div><details class="photo-gallery"><summary>Photos from work and university</summary><div class="gallery-grid"><figure><img src="images/radix-nutrition-2025.jpg" alt="Robert Spencer at Radix Nutrition" class="photo-zoomable" loading="lazy" /><figcaption>Radix Nutrition, 2025</figcaption></figure><figure><img src="images/2025-02-21-massey-manalyt-supervisors.jpg" alt="Robert Spencer with the Massey research team" class="photo-zoomable" loading="lazy" /><figcaption>Massey research team, 2025</figcaption></figure><figure><img src="images/2024-massey-graduation.jpeg" alt="Robert Spencer at Massey graduation" class="photo-zoomable" loading="lazy" /><figcaption>Master of Analytics graduation</figcaption></figure><figure><img src="images/2023-waikato-graduation.jpeg" alt="Robert Spencer at Waikato graduation" class="photo-zoomable" loading="lazy" /><figcaption>University of Waikato graduation</figcaption></figure></div></details></section><section id="contact" class="main custom-section"><div class="section-heading"><h2>Let’s connect</h2></div><span id="content" class="anchor-alias"></span>
+    <p>Based in Brisbane. I welcome conversations about practical AI systems, research and collaboration across industry, health and the environment.</p>
+    <div class="contact-actions"><a href="mailto:rspencer9721@gmail.com" class="button primary">Email me</a><a href="https://www.linkedin.com/in/rspencer9721/" target="_blank" rel="noopener noreferrer" class="button">LinkedIn</a><a href="documents/2026-08-17%20Robert%20Spencer_CV.pdf" target="_blank" class="button">Download CV</a></div>
+    <p class="follow-note">I also share career transitions into AI and the practical side of building technical skills.</p>
+    <ul class="link-list"><li><a href="https://www.youtube.com/@robertspencer406" target="_blank" rel="noopener noreferrer">YouTube</a></li><li><a href="https://github.com/robertjspencer" target="_blank" rel="noopener noreferrer">GitHub</a></li><li><a href="https://orcid.org/0009-0005-2321-6212" target="_blank" rel="noopener noreferrer">ORCID</a></li></ul></section>
+</main>
 
 			<footer id="footer">
 				<p class="copyright">&copy; 2026 Robert Spencer</p>
