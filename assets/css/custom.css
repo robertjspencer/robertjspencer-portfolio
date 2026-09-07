@@ -170,9 +170,20 @@ figcaption { color: var(--text-muted); font-size: .8rem; line-height: 1.5; margi
 .entry-heading h3 { font-size: 1.2rem; line-height: 1.35; margin: 0 0 .25rem; }
 .entry-org, .entry-date { color: var(--text-muted); font-size: .9rem; margin: 0; }
 .entry-date { flex-shrink: 0; padding-top: .15rem; }
-.entry-logo { width: 72px; height: 48px; object-fit: contain; flex-shrink: 0; border-radius: .3rem; }
+.entry-logo { width: 96px; height: 60px; object-fit: contain; flex-shrink: 0; border-radius: .4rem; }
 .entry-body { max-width: 52rem; }
 .entry-body p:last-child { margin-bottom: 0; }
+.resume-entry--visual { display: grid; grid-template-columns: minmax(0, 1fr) 240px; align-items: start; gap: 2rem; }
+.resume-entry--visual .entry-heading { flex-wrap: wrap; }
+.resume-entry--visual .entry-date { width: 100%; }
+.entry-copy { min-width: 0; }
+.entry-photo { margin: 0; padding: .65rem; border: 1px solid var(--border-soft); border-radius: .85rem; background: var(--surface); }
+.entry-photo img { display: block; width: 100%; height: auto; border-radius: .45rem; }
+.entry-photo figcaption { padding: .2rem .15rem; }
+@media (max-width: 736px) {
+    .resume-entry--visual { grid-template-columns: 1fr; gap: 1rem; }
+    .entry-photo { width: 100%; max-width: 340px; }
+}
 .photo-gallery { margin-top: 2rem; border-top: 1px solid var(--border-soft); padding-top: .5rem; }
 .gallery-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
 .gallery-grid figure { margin: 0; min-width: 0; }
@@ -216,7 +227,7 @@ figcaption { color: var(--text-muted); font-size: .8rem; line-height: 1.5; margi
     .metric-card span { font-size: .9rem; line-height: 1.4; }
     .proof-grid { grid-template-columns: 1fr; gap: 1rem; }
     .proof-card { padding: 1.15rem; }
-    .entry-logo { width: 58px; height: 42px; }
+    .entry-logo { width: 80px; height: 50px; }
     .entry-heading { gap: .5rem .75rem; }
     .entry-heading h3 { font-size: 1.15rem; }
     #main #contact { padding: 1.25rem; }
@@ -311,3 +322,7 @@ figcaption { color: var(--text-muted); font-size: .8rem; line-height: 1.5; margi
 	user-select: none;
 	-webkit-user-drag: none;
 }
+
+/* Official wordmarks retain their contrast in either page theme. */
+.entry-logo--dark { background: #10141c; padding: 6px; border: 1px solid #59616d; }
+.entry-logo--light { background: #ffffff; padding: 5px; border: 1px solid #c4c8ce; }
